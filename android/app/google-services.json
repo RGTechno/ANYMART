@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "260181023004",
+    "project_id": "anybuy-8d64d",
+    "storage_bucket": "anybuy-8d64d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260181023004:android:6aaa040c7dcce51a4302d9",
+        "android_client_info": {
+          "package_name": "com.rgtechcafe.anybuy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260181023004-9rdeib89v4o9gvrevi13j0400us87s98.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU2H41k1nOTlFvUarW-YwGg9bXirAMAw8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260181023004-9rdeib89v4o9gvrevi13j0400us87s98.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
