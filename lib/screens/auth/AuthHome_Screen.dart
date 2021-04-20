@@ -48,13 +48,13 @@ class _AuthHomeState extends State<AuthHome> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   iconTheme: IconThemeData(
-        //     color: Colors.black87,
-        //   ),
-        //   backgroundColor: Colors.transparent,
-        // ),
+        appBar: AppBar(
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black87,
+          ),
+          backgroundColor: Colors.transparent,
+        ),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

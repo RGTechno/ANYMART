@@ -1,12 +1,14 @@
+import 'package:anybuy/provider/MerchantData_Provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/AuthData_Provider.dart';
+import 'package:anybuy/screens/AddProduct_Screen.dart';
 import 'package:anybuy/screens/Home_Screen.dart';
 import 'package:anybuy/screens/auth/AuthHome_Screen.dart';
 import 'package:anybuy/screens/auth/AuthMerch_Screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +27,15 @@ class MyApp extends StatelessWidget {
       statusBarColor: Colors.transparent,
     ));
 
-    return ChangeNotifierProvider(
-      create: (context) => AuthData(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthData(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MerchantData(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'AnyBuy',
@@ -36,9 +45,10 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: homeScreen,
         routes: {
-          authHome: (context) => AuthHome(),
-          merchAuth: (context) => AuthMerchant(),
-          homeScreen: (context) => HomeScreen(),
+          homeScreen: (_) => HomeScreen(),
+          authHome: (_) => AuthHome(),
+          merchAuth: (_) => AuthMerchant(),
+          addProduct: (_) => AddProduct(),
         },
       ),
     );

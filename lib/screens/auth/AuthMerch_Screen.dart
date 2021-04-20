@@ -51,13 +51,13 @@ class _AuthMerchantState extends State<AuthMerchant> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   iconTheme: IconThemeData(
-        //     color: Colors.black87,
-        //   ),
-        //   backgroundColor: Colors.transparent,
-        // ),
+        appBar: AppBar(
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black87,
+          ),
+          backgroundColor: Colors.transparent,
+        ),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

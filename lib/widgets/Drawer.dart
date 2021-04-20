@@ -8,9 +8,10 @@ class DrawerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authData = Provider.of<AuthData>(context);
-    final user = authData.auth.currentUser;
+    var user;
     final currentUserData = authData.currentUserData;
-    if (user != null) {
+    if (currentUserData.isNotEmpty) {
+      user = authData.auth.currentUser;
       // print(user.uid + user.email);
       // authData.getCurrentUserData("users", "${user.uid}");
       print(currentUserData["firstname"]);
@@ -94,6 +95,18 @@ class DrawerMenu extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.of(context).pushNamed(merchAuth);
+                  },
+                )
+              : Container(),
+          currentUserData["isMerchant"] == true && user != null
+              ? ListTile(
+                  leading: Icon(Icons.add),
+                  title: Text(
+                    "Add Product",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(addProduct);
                   },
                 )
               : Container(),

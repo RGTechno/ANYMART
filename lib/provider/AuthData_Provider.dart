@@ -1,3 +1,4 @@
+import 'package:anybuy/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,7 +30,7 @@ class AuthData with ChangeNotifier {
     String cat,
   ) async {
     try {
-      await firestore.collection("/outlets").add({
+      await firestore.collection("/$outletsCollection").add({
         "merchantId": id,
         "merchantName": name,
         "outletName": outletName,
@@ -54,7 +55,7 @@ class AuthData with ChangeNotifier {
       );
 
       await firestore
-          .collection("allUsers")
+          .collection(allUserCollection)
           .doc("${userCredential.user.uid}")
           .set({
         "id": "${userCredential.user.uid}",
@@ -65,7 +66,7 @@ class AuthData with ChangeNotifier {
       });
 
       await firestore
-          .collection("users")
+          .collection(userCollection)
           .doc("${userCredential.user.uid}")
           .set({
         "id": "${userCredential.user.uid}",
@@ -103,7 +104,7 @@ class AuthData with ChangeNotifier {
       );
 
       await firestore
-          .collection("allUsers")
+          .collection(allUserCollection)
           .doc("${userCredential.user.uid}")
           .set({
         "id": "${userCredential.user.uid}",
@@ -117,7 +118,7 @@ class AuthData with ChangeNotifier {
       });
 
       await firestore
-          .collection("merchant")
+          .collection(merchantCollection)
           .doc("${userCredential.user.uid}")
           .set({
         "id": "${userCredential.user.uid}",
@@ -178,7 +179,8 @@ class AuthData with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getCurrentUserData({String collection = "allUsers"}) async {
+  Future<void> getCurrentUserData(
+      {String collection = "$allUserCollection"}) async {
     var data;
     try {
       var currentData = await firestore
