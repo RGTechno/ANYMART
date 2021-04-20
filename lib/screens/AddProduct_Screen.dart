@@ -4,6 +4,7 @@ import 'package:anybuy/widgets/InputFieldDec.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 
@@ -20,8 +21,6 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   Widget build(BuildContext context) {
-    final authData = Provider.of<AuthData>(context);
-    final user = authData.auth.currentUser;
     final merchantData = Provider.of<MerchantData>(context);
 
     void validate() async {
@@ -31,8 +30,8 @@ class _AddProductState extends State<AddProduct> {
       }
       _addProductFormKey.currentState.save();
       await merchantData.addProduct(
-        user.uid,
         {
+          "productId": Uuid().v4(),
           "productName": proName,
           "countInStock": countInStock,
         },

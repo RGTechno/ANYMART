@@ -38,9 +38,18 @@ class MerchScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          return Center(
-            child: Text("Data Fetched"),
-          );
+          return snapshot.data["products"] == null
+              ? Center(
+                  child: Text("No Products Added Yet"),
+                )
+              : ListView.builder(
+                  itemBuilder: (ctx, index) => Center(
+                    child: Text(
+                      snapshot.data["products"][index]["productName"],
+                    ),
+                  ),
+                  itemCount: snapshot.data["products"].length,
+                );
         },
       ),
     );

@@ -1,4 +1,6 @@
+import 'package:anybuy/provider/Outlet_Provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/Drawer.dart';
 import '../widgets/Categories.dart';
@@ -7,6 +9,7 @@ import '../widgets/Search.dart';
 class UserHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final outletData = Provider.of<OutletData>(context);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -30,13 +33,33 @@ class UserHome extends StatelessWidget {
           elevation: 0,
           backgroundColor: Colors.transparent,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SearchBar(),
-              Categories(),
-            ],
-          ),
+        body: FutureBuilder(
+          future: outletData.getAllOutlets(),
+          builder: (ctx, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting ||
+                snapshot.data == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  SearchBar(),
+                  Categories(),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (ctx, index) {
+                      return Center(
+                        child: Text(snapshot.data[index]["outletName"]),
+                      );
+                    },
+                    itemCount: snapshot.data.length,
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

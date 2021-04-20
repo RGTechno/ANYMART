@@ -5,9 +5,18 @@ import 'package:flutter/material.dart';
 class MerchantData with ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> addProduct(String currentUserId, Map product) async {
+  Map<String, dynamic> currentUserProduct = {};
+  String currentUserOutletId;
+
+  Future<void> addProduct(Map product) async {
+    print(currentUserOutletId);
     try {
-      await firestore.collection(outletsCollection).doc();
+      await firestore
+          .collection(outletsCollection)
+          .doc(currentUserOutletId)
+          .update({
+        "products": FieldValue.arrayUnion([product]),
+      });
       print("data added");
     } catch (err) {
       print(err);
@@ -15,8 +24,10 @@ class MerchantData with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getProductsWithId(String currentUserId) async {
+  Future<Map<String, dynamic>> getProductsWithId(String currentUserId) async {
     var userProducts;
+    currentUserProduct.clear();
+
     try {
       userProducts = await firestore
           .collection(outletsCollection)
@@ -25,11 +36,21 @@ class MerchantData with ChangeNotifier {
             isEqualTo: currentUserId,
           )
           .get();
-      userProducts.docs.forEach((doc)=>print(doc.id));
-      // print();
+      userProducts.docs.forEach((doc) {
+        currentUserOutletId = doc.id;
+        currentUserProduct.addAll({
+          "merchantName": doc["merchantName"],
+          "category": doc["category"],
+          "outletName": doc["outletName"],
+          "merchantId": doc["merchantId"],
+          "products": doc["products"],
+        });
+      });
+      print(currentUserOutletId);
     } catch (err) {
       print(err);
     }
+    return currentUserProduct;
     // notifyListeners();
   }
 }
