@@ -36,13 +36,13 @@ class UserHome extends StatelessWidget {
         body: FutureBuilder(
           future: outletData.getAllOutlets(),
           builder: (ctx, snapshot) {
-            var sd = snapshot.data;
             if (snapshot.connectionState == ConnectionState.waiting ||
-                sd == null) {
+                snapshot.data == null) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
+            var sd = snapshot.data;
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -51,7 +51,10 @@ class UserHome extends StatelessWidget {
                   ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (ctx, index) {
-                      return OutletItem(sd[index][outletName]);
+                      return OutletItem(
+                        outletName: sd[index][outletName],
+                        id: sd[index][outletId],
+                      );
                     },
                     itemCount: sd.length,
                   ),

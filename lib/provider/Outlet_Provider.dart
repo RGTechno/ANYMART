@@ -13,6 +13,7 @@ class OutletData with ChangeNotifier {
       allOutlets = await firestore.collection(outletsCollection).get();
       allOutlets.docs.forEach((outlet) {
         outlets.add({
+          outletId: outlet.id,
           merchantName: outlet[merchantName],
           category: outlet[category],
           outletName: outlet[outletName],
@@ -41,6 +42,7 @@ class OutletData with ChangeNotifier {
           .get();
       outletsByCat.docs.forEach((outlet) {
         catOutlets.add({
+          outletId: outlet.id,
           merchantName: outlet[merchantName],
           category: outlet[category],
           outletName: outlet[outletName],
@@ -53,5 +55,21 @@ class OutletData with ChangeNotifier {
       print(err);
     }
     return catOutlets;
+  }
+
+  Future<Map<String, dynamic>> getOutletById(String outId) async {
+    var outletsById;
+    final Map<String, dynamic> idOutlet = {};
+    try {
+      outletsById =
+          await firestore.collection(outletsCollection).doc(outId).get();
+
+      idOutlet.addAll(outletsById.data());
+
+      print(idOutlet);
+    } catch (err) {
+      print(err);
+    }
+    return idOutlet;
   }
 }

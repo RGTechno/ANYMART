@@ -5,6 +5,8 @@ const authHome = "/authHome";
 const merchAuth = "/authMerchant";
 const addProduct = "/addProduct";
 const singleCategoryScreen = "/catScreen";
+const outletScreen = "/outletScreen";
+
 
 const userCollection = "users";
 const merchantCollection = "merchant";
@@ -17,6 +19,7 @@ const products = "products";
 const merchantId = "merchantId";
 const outletName = "outletName";
 const category = "category";
+const outletId = "outletId";
 
 Color color1 = Colors.deepPurpleAccent;
 Color color2 = Colors.white70;

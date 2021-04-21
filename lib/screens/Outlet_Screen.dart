@@ -1,26 +1,16 @@
-import 'package:anybuy/provider/Outlet_Provider.dart';
-import 'package:anybuy/widgets/Outlet_Item.dart';
+import 'package:anybuy/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../provider/Outlet_Provider.dart';
 
-import '../constants.dart';
-
-class CategoryScreen extends StatelessWidget {
+class Outlet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final outletData = Provider.of<OutletData>(context);
 
-    final categoryArgs = ModalRoute.of(context).settings.arguments as Map;
-    final String cat = categoryArgs["category"];
+    final outletId = ModalRoute.of(context).settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "${categoryArgs["category"]}",
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-          ),
-        ),
         iconTheme: IconThemeData(
           color: Colors.black87,
         ),
@@ -29,28 +19,28 @@ class CategoryScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: FutureBuilder(
-        future: outletData.getOutletsByCategory(cat),
+        future: outletData.getOutletById(outletId),
         builder: (ctx, snapshot) {
-          var sd = snapshot.data;
           if (snapshot.connectionState == ConnectionState.waiting ||
-              sd == null) {
+              snapshot.data == null) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          return sd.length == 0
+          var sdp = snapshot.data[products];
+
+          return sdp.length == 0
               ? Center(
-                  child: Text("No Outlets for this category at the moment"),
+                  child: CircularProgressIndicator(),
                 )
               : ListView.builder(
                   shrinkWrap: true,
                   itemBuilder: (ctx, index) {
-                    return OutletItem(
-                      outletName: sd[index][outletName],
-                      id: sd[index][outletId],
+                    return Center(
+                      child: Text(sdp[index]["productName"]),
                     );
                   },
-                  itemCount: sd.length,
+                  itemCount: sdp.length,
                 );
         },
       ),

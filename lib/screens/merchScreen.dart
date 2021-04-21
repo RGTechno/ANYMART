@@ -33,13 +33,13 @@ class MerchScreen extends StatelessWidget {
       body: FutureBuilder(
         future: merchantData.getProductsWithId(user.uid),
         builder: (ctx, snapshot) {
-          var sdp = snapshot.data[products];
           if (snapshot.connectionState == ConnectionState.waiting ||
-              sdp == null) {
+              snapshot.data == null) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
+          var sdp = snapshot.data[products];
           return sdp == null
               ? Center(
                   child: Text("No Products Added Yet"),

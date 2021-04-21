@@ -1,6 +1,7 @@
 import 'package:anybuy/provider/MerchantData_Provider.dart';
 import 'package:anybuy/provider/Outlet_Provider.dart';
 import 'package:anybuy/screens/Category_Screen.dart';
+import 'package:anybuy/screens/Outlet_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
           merchAuth: (_) => AuthMerchant(),
           addProduct: (_) => AddProduct(),
           singleCategoryScreen: (_) => CategoryScreen(),
+          outletScreen: (_) => Outlet(),
         },
       ),
     );
