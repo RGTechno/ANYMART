@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import './Category.dart';
+
 class Categories extends StatelessWidget {
   static List<Map<String, dynamic>> catMap = [
     {
@@ -63,20 +65,10 @@ class Categories extends StatelessWidget {
               vertical: 5,
               horizontal: 8.0,
             ),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundImage: NetworkImage(
-                    catMap[index]["image"],
-                  ),
-                  // backgroundColor: catMap[index]["color"],
-                ),
-                Text(
-                  catMap[index]["category"],
-                  style: TextStyle(fontSize: 13),
-                ),
-              ],
+            child: Category(
+              id: catMap[index]["id"],
+              imageUrl: catMap[index]["image"],
+              catName: catMap[index]["category"],
             ),
           );
         },

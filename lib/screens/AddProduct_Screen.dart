@@ -18,6 +18,7 @@ class _AddProductState extends State<AddProduct> {
 
   String proName = "";
   double countInStock;
+  double price;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class _AddProductState extends State<AddProduct> {
           "productId": Uuid().v4(),
           "productName": proName,
           "countInStock": countInStock,
+          "price": price,
         },
       );
     }
@@ -112,6 +114,27 @@ class _AddProductState extends State<AddProduct> {
                             onSaved: (newValue) {
                               setState(() {
                                 countInStock = double.parse(newValue);
+                              });
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: TextFormField(
+                            decoration: inpDec(
+                              "Price in INR",
+                              "Price",
+                            ),
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return "Required";
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.number,
+                            onSaved: (val) {
+                              setState(() {
+                                price = double.parse(val);
                               });
                             },
                           ),

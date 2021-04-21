@@ -26,4 +26,32 @@ class OutletData with ChangeNotifier {
     }
     return outlets;
   }
+
+  Future<List<Map<String, dynamic>>> getOutletsByCategory(String cat) async {
+    // print(category);
+    var outletsByCat;
+    final List<Map<String, dynamic>> catOutlets = [];
+    try {
+      outletsByCat = await firestore
+          .collection(outletsCollection)
+          .where(
+            category,
+            isEqualTo: cat,
+          )
+          .get();
+      outletsByCat.docs.forEach((outlet) {
+        catOutlets.add({
+          merchantName: outlet[merchantName],
+          category: outlet[category],
+          outletName: outlet[outletName],
+          merchantId: outlet[merchantId],
+          products: outlet[products],
+        });
+      });
+      // print(catOutlets);
+    } catch (err) {
+      print(err);
+    }
+    return catOutlets;
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:anybuy/constants.dart';
+import 'package:anybuy/widgets/Product_Item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/AuthData_Provider.dart';
@@ -20,8 +21,6 @@ class MerchScreen extends StatelessWidget {
           style: TextStyle(
             color: Colors.black87,
             fontSize: 40,
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.bold,
           ),
         ),
         iconTheme: IconThemeData(
@@ -34,22 +33,29 @@ class MerchScreen extends StatelessWidget {
       body: FutureBuilder(
         future: merchantData.getProductsWithId(user.uid),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          var sdp = snapshot.data[products];
+          if (snapshot.connectionState == ConnectionState.waiting ||
+              sdp == null) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          return snapshot.data[products] == null
+          return sdp == null
               ? Center(
                   child: Text("No Products Added Yet"),
                 )
               : ListView.builder(
-                  itemBuilder: (ctx, index) => Center(
-                    child: Text(
-                      snapshot.data[products][index]["productName"],
+                  itemBuilder: (ctx, index) => ProductItem(
+                    proId: sdp[index]["productId"],
+                    proName: sdp[index]["productName"],
+                    countInStock: double.parse(
+                      sdp[index]["countInStock"].toString(),
+                    ),
+                    price: double.parse(
+                      sdp[index]["price"].toString(),
                     ),
                   ),
-                  itemCount: snapshot.data[products].length,
+                  itemCount: sdp.length,
                 );
         },
       ),

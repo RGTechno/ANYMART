@@ -1,5 +1,6 @@
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/Outlet_Provider.dart';
+import 'package:anybuy/widgets/Outlet_Item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +24,6 @@ class UserHome extends StatelessWidget {
             style: TextStyle(
               color: Colors.black87,
               fontSize: 40,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
             ),
           ),
           iconTheme: IconThemeData(
@@ -37,8 +36,9 @@ class UserHome extends StatelessWidget {
         body: FutureBuilder(
           future: outletData.getAllOutlets(),
           builder: (ctx, snapshot) {
+            var sd = snapshot.data;
             if (snapshot.connectionState == ConnectionState.waiting ||
-                snapshot.data == null) {
+                sd == null) {
               return Center(
                 child: CircularProgressIndicator(),
               );
@@ -51,11 +51,9 @@ class UserHome extends StatelessWidget {
                   ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (ctx, index) {
-                      return Center(
-                        child: Text(snapshot.data[index][outletName]),
-                      );
+                      return OutletItem(sd[index][outletName]);
                     },
-                    itemCount: snapshot.data.length,
+                    itemCount: sd.length,
                   ),
                 ],
               ),
