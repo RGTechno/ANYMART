@@ -1,3 +1,4 @@
+import 'package:anybuy/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/AuthData_Provider.dart';
@@ -38,17 +39,17 @@ class MerchScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          return snapshot.data["products"] == null
+          return snapshot.data[products] == null
               ? Center(
                   child: Text("No Products Added Yet"),
                 )
               : ListView.builder(
                   itemBuilder: (ctx, index) => Center(
                     child: Text(
-                      snapshot.data["products"][index]["productName"],
+                      snapshot.data[products][index]["productName"],
                     ),
                   ),
-                  itemCount: snapshot.data["products"].length,
+                  itemCount: snapshot.data[products].length,
                 );
         },
       ),

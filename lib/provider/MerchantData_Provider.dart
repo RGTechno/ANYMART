@@ -1,6 +1,6 @@
-import 'package:anybuy/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:anybuy/constants.dart';
 
 class MerchantData with ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -15,7 +15,7 @@ class MerchantData with ChangeNotifier {
           .collection(outletsCollection)
           .doc(currentUserOutletId)
           .update({
-        "products": FieldValue.arrayUnion([product]),
+        products: FieldValue.arrayUnion([product]),
       });
       print("data added");
     } catch (err) {
@@ -32,18 +32,18 @@ class MerchantData with ChangeNotifier {
       userProducts = await firestore
           .collection(outletsCollection)
           .where(
-            "merchantId",
+            merchantId,
             isEqualTo: currentUserId,
           )
           .get();
       userProducts.docs.forEach((doc) {
         currentUserOutletId = doc.id;
         currentUserProduct.addAll({
-          "merchantName": doc["merchantName"],
-          "category": doc["category"],
-          "outletName": doc["outletName"],
-          "merchantId": doc["merchantId"],
-          "products": doc["products"],
+          merchantName: doc[merchantName],
+          category: doc[category],
+          outletName: doc[outletName],
+          merchantId: doc[merchantId],
+          products: doc[products],
         });
       });
       print(currentUserOutletId);

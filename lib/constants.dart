@@ -12,6 +12,12 @@ const allUserCollection = "allUsers";
 const outletsCollection = "outlets";
 const productsCollection = "products";
 
+const merchantName = "merchantName";
+const products = "products";
+const merchantId = "merchantId";
+const outletName = "outletName";
+const category = "category";
+
 
 Color color1 = Colors.deepPurpleAccent;
 Color color2 = Colors.white70;

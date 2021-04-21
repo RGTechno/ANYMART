@@ -1,3 +1,4 @@
+import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/Outlet_Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class UserHome extends StatelessWidget {
                     shrinkWrap: true,
                     itemBuilder: (ctx, index) {
                       return Center(
-                        child: Text(snapshot.data[index]["outletName"]),
+                        child: Text(snapshot.data[index][outletName]),
                       );
                     },
                     itemCount: snapshot.data.length,

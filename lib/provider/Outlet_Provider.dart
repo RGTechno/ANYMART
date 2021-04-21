@@ -5,20 +5,19 @@ import "../constants.dart";
 class OutletData with ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  List<Map<String, dynamic>> outlets = [];
-
   Future<List<Map<String, dynamic>>> getAllOutlets() async {
     var allOutlets;
-    outlets.clear();
+    List<Map<String, dynamic>> outlets = [];
+
     try {
       allOutlets = await firestore.collection(outletsCollection).get();
       allOutlets.docs.forEach((outlet) {
         outlets.add({
-          "merchantName": outlet["merchantName"],
-          "category": outlet["category"],
-          "outletName": outlet["outletName"],
-          "merchantId": outlet["merchantId"],
-          "products": outlet["products"],
+          merchantName: outlet[merchantName],
+          category: outlet[category],
+          outletName: outlet[outletName],
+          merchantId: outlet[merchantId],
+          products: outlet[products],
         });
       });
       // print(outlets);
