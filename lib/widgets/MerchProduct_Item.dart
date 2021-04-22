@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
-class ProductItem extends StatelessWidget {
+class MerchantProductItem extends StatelessWidget {
   final String proId;
   final String proName;
   final double countInStock;
   final double price;
 
-  ProductItem({
+  MerchantProductItem({
     @required this.proId,
     @required this.proName,
     @required this.countInStock,

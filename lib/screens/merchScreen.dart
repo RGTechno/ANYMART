@@ -1,5 +1,5 @@
 import 'package:anybuy/constants.dart';
-import 'package:anybuy/widgets/Product_Item.dart';
+import 'package:anybuy/widgets/MerchProduct_Item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/AuthData_Provider.dart';
@@ -45,7 +45,7 @@ class MerchScreen extends StatelessWidget {
                   child: Text("No Products Added Yet"),
                 )
               : ListView.builder(
-                  itemBuilder: (ctx, index) => ProductItem(
+                  itemBuilder: (ctx, index) => MerchantProductItem(
                     proId: sdp[index]["productId"],
                     proName: sdp[index]["productName"],
                     countInStock: double.parse(

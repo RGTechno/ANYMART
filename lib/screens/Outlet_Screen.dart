@@ -1,6 +1,10 @@
 import 'package:anybuy/constants.dart';
+import 'package:anybuy/widgets/OutletHeader.dart';
+import 'package:anybuy/widgets/UserProduct_Item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../provider/Outlet_Provider.dart';
 
 class Outlet extends StatelessWidget {
@@ -9,6 +13,7 @@ class Outlet extends StatelessWidget {
     final outletData = Provider.of<OutletData>(context);
 
     final outletId = ModalRoute.of(context).settings.arguments as String;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -33,14 +38,37 @@ class Outlet extends StatelessWidget {
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (ctx, index) {
-                    return Center(
-                      child: Text(sdp[index]["productName"]),
-                    );
-                  },
-                  itemCount: sdp.length,
+              : SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      OutletHeader(outletName: snapshot.data["outletName"]),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          "Recommended",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (ctx, index) {
+                          return UserProductItem(
+                            productId: sdp[index]["productId"],
+                            productName: sdp[index]["productName"],
+                            productPrice: double.parse(
+                              sdp[index]["price"].toString(),
+                            ),
+                          );
+                        },
+                        itemCount: sdp.length,
+                      ),
+                    ],
+                  ),
                 );
         },
       ),
