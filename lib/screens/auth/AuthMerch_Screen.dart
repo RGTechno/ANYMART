@@ -22,6 +22,39 @@ class _AuthMerchantState extends State<AuthMerchant> {
   String category;
   bool wantSignup = false;
 
+  FocusNode _email;
+  FocusNode _password;
+  FocusNode _firstName;
+  FocusNode _lastName;
+  FocusNode _outletName;
+  FocusNode _category;
+  FocusNode _create;
+
+  @override
+  void initState() {
+    super.initState();
+    _email = FocusNode();
+    _password = FocusNode();
+    _firstName = FocusNode();
+    _lastName = FocusNode();
+    _outletName = FocusNode();
+    _category = FocusNode();
+    _create = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    _firstName.dispose();
+    _lastName.dispose();
+    _outletName.dispose();
+    _category.dispose();
+    _create.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authData = Provider.of<AuthData>(context);
@@ -89,6 +122,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
+                                focusNode: _firstName,
                                 decoration: inpDec(
                                   "First Name",
                                   "First Name",
@@ -98,6 +132,12 @@ class _AuthMerchantState extends State<AuthMerchant> {
                                     return "Required";
                                   }
                                   return null;
+                                },
+                                onFieldSubmitted: (String value) {
+                                  merchFirstName = value;
+                                  _firstName.unfocus();
+                                  FocusScope.of(context)
+                                      .requestFocus(_lastName);
                                 },
                                 onSaved: (newValue) {
                                   setState(() {
@@ -111,6 +151,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
+                                focusNode: _lastName,
                                 decoration: inpDec(
                                   "Last Name",
                                   "Last Name",
@@ -120,6 +161,11 @@ class _AuthMerchantState extends State<AuthMerchant> {
                                     return "Required";
                                   }
                                   return null;
+                                },
+                                onFieldSubmitted: (String value) {
+                                  merchLastName = value;
+                                  _lastName.unfocus();
+                                  FocusScope.of(context).requestFocus(_email);
                                 },
                                 onSaved: (newValue) {
                                   setState(() {
@@ -132,6 +178,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                       Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: TextFormField(
+                          focusNode: _email,
                           decoration: inpDec(
                             "Enter Email-ID",
                             "Email",
@@ -141,6 +188,11 @@ class _AuthMerchantState extends State<AuthMerchant> {
                               return "Invalid";
                             }
                             return null;
+                          },
+                          onFieldSubmitted: (String value) {
+                            merchEmail = value;
+                            _email.unfocus();
+                            FocusScope.of(context).requestFocus(_password);
                           },
                           onSaved: (newValue) {
                             setState(() {
@@ -152,6 +204,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                       Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: TextFormField(
+                          focusNode: _password,
                           decoration: inpDec(
                             "Enter Password",
                             "Password",
@@ -166,6 +219,11 @@ class _AuthMerchantState extends State<AuthMerchant> {
                             }
                             return null;
                           },
+                          onFieldSubmitted: (String value) {
+                            merchPass = value;
+                            _password.unfocus();
+                            FocusScope.of(context).requestFocus(_outletName);
+                          },
                           onSaved: (newValue) {
                             setState(() {
                               merchPass = newValue;
@@ -177,6 +235,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
+                                focusNode: _outletName,
                                 decoration: inpDec(
                                   "Outlet Name",
                                   "Outlet Name",
@@ -186,6 +245,12 @@ class _AuthMerchantState extends State<AuthMerchant> {
                                     return "Required";
                                   }
                                   return null;
+                                },
+                                onFieldSubmitted: (String value) {
+                                  outletName = value;
+                                  _outletName.unfocus();
+                                  FocusScope.of(context)
+                                      .requestFocus(_category);
                                 },
                                 onSaved: (newValue) {
                                   setState(() {
@@ -199,6 +264,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: DropdownButtonFormField(
+                                focusNode: _category,
                                 value: category,
                                 decoration: inpDec(
                                   "Category",
@@ -218,11 +284,14 @@ class _AuthMerchantState extends State<AuthMerchant> {
                                   setState(() {
                                     category = newValue;
                                   });
+                                  _category.unfocus();
+                                  FocusScope.of(context).requestFocus(_create);
                                 },
                               ),
                             )
                           : Container(),
                       TextButton.icon(
+                        focusNode: _create,
                         onPressed: validate,
                         icon: Icon(
                           !wantSignup

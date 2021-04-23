@@ -18,6 +18,14 @@ class MerchantData with ChangeNotifier {
         products: FieldValue.arrayUnion([product]),
       });
       // print("data added");
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        snackBar(
+          ctx,
+          "Product Added",
+          "View",
+          homeScreen,
+        ),
+      );
     } catch (err) {
       // print(err);
       String errMsg = "Unable To Add Product!";

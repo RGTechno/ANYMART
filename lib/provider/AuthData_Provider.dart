@@ -78,9 +78,18 @@ class AuthData with ChangeNotifier {
         "initials": "${firstname[0].toUpperCase()}${lastname[0].toUpperCase()}",
       });
 
-      print(
-        "User Created ${userCredential.user.email}, ${userCredential.user.uid}",
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        snackBar(
+          ctx,
+          "User Created Successfully",
+          "Login",
+          authHome,
+        ),
       );
+
+      // print(
+      //   "User Created ${userCredential.user.email}, ${userCredential.user.uid}",
+      // );
     } on FirebaseAuthException catch (e) {
       String errMessage = "Unable To Create User!";
       if (e.code == 'email-already-in-use') {
@@ -145,9 +154,18 @@ class AuthData with ChangeNotifier {
         category,
       );
 
-      print(
-        "User Created ${userCredential.user.email}, ${userCredential.user.uid}",
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        snackBar(
+          ctx,
+          "User Created Successfully",
+          "Login",
+          merchAuth,
+        ),
       );
+
+      // print(
+      //   "User Created ${userCredential.user.email}, ${userCredential.user.uid}",
+      // );
     } on FirebaseAuthException catch (e) {
       String errMessage = "Unable To Create Merchant!";
       if (e.code == 'email-already-in-use') {

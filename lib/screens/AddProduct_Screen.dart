@@ -19,6 +19,30 @@ class _AddProductState extends State<AddProduct> {
   double countInStock;
   double price;
 
+  FocusNode _name;
+  FocusNode _count;
+  FocusNode _price;
+  FocusNode _add;
+
+  @override
+  void initState() {
+    super.initState();
+    _name = FocusNode();
+    _count = FocusNode();
+    _price = FocusNode();
+    _add = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _count.dispose();
+    _price.dispose();
+    _add.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final merchantData = Provider.of<MerchantData>(context);
@@ -80,6 +104,7 @@ class _AddProductState extends State<AddProduct> {
                         Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: TextFormField(
+                            focusNode: _name,
                             decoration: inpDec(
                               "Product Name",
                               "Product Name",
@@ -89,6 +114,11 @@ class _AddProductState extends State<AddProduct> {
                                 return "Required";
                               }
                               return null;
+                            },
+                            onFieldSubmitted: (String value) {
+                              proName = value;
+                              _name.unfocus();
+                              FocusScope.of(context).requestFocus(_count);
                             },
                             onSaved: (newValue) {
                               setState(() {
@@ -100,6 +130,7 @@ class _AddProductState extends State<AddProduct> {
                         Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: TextFormField(
+                            focusNode: _count,
                             decoration: inpDec(
                               "Count In Stock",
                               "Count In Stock",
@@ -111,6 +142,11 @@ class _AddProductState extends State<AddProduct> {
                               return null;
                             },
                             keyboardType: TextInputType.number,
+                            onFieldSubmitted: (String value) {
+                              countInStock = double.parse(value);
+                              _count.unfocus();
+                              FocusScope.of(context).requestFocus(_price);
+                            },
                             onSaved: (newValue) {
                               setState(() {
                                 countInStock = double.parse(newValue);
@@ -121,6 +157,7 @@ class _AddProductState extends State<AddProduct> {
                         Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: TextFormField(
+                            focusNode: _price,
                             decoration: inpDec(
                               "Price in INR",
                               "Price",
@@ -132,6 +169,11 @@ class _AddProductState extends State<AddProduct> {
                               return null;
                             },
                             keyboardType: TextInputType.number,
+                            onFieldSubmitted: (String value) {
+                              price = double.parse(value);
+                              _price.unfocus();
+                              FocusScope.of(context).requestFocus(_add);
+                            },
                             onSaved: (val) {
                               setState(() {
                                 price = double.parse(val);
@@ -140,6 +182,7 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                         TextButton.icon(
+                          focusNode: _add,
                           onPressed: validate,
                           icon: Icon(
                             Icons.add,

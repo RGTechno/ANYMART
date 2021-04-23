@@ -7,7 +7,6 @@ const addProduct = "/addProduct";
 const singleCategoryScreen = "/catScreen";
 const outletScreen = "/outletScreen";
 
-
 const userCollection = "users";
 const merchantCollection = "merchant";
 const allUserCollection = "allUsers";
@@ -26,7 +25,7 @@ Color color2 = Colors.white70;
 Color color3 = Colors.pink;
 Color color4 = Colors.redAccent;
 
-void errorDialog(BuildContext ctx,String errorMessage) {
+void errorDialog(BuildContext ctx, String errorMessage) {
   showDialog(
     context: ctx,
     builder: (ctx) => AlertDialog(
@@ -42,4 +41,22 @@ void errorDialog(BuildContext ctx,String errorMessage) {
       ],
     ),
   );
+}
+
+SnackBar snackBar(
+  BuildContext ctx,
+  String message,
+  String actionLabel,
+  String navRoute,
+) {
+  final snackBar = SnackBar(
+    content: Text(message),
+    action: SnackBarAction(
+      label: actionLabel,
+      onPressed: () {
+        Navigator.of(ctx).pushReplacementNamed(navRoute);
+      },
+    ),
+  );
+  return snackBar;
 }
