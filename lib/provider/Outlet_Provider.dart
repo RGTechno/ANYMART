@@ -21,7 +21,7 @@ class OutletData with ChangeNotifier {
           products: outlet[products],
         });
       });
-      // print(outlets);
+      print(outlets);
     } catch (err) {
       print(err);
     }

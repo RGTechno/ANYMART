@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:anybuy/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class MerchantData with ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -8,7 +8,7 @@ class MerchantData with ChangeNotifier {
   Map<String, dynamic> currentUserProduct = {};
   String currentUserOutletId;
 
-  Future<void> addProduct(Map product) async {
+  Future<void> addProduct(BuildContext ctx, Map product) async {
     print(currentUserOutletId);
     try {
       await firestore
@@ -17,9 +17,11 @@ class MerchantData with ChangeNotifier {
           .update({
         products: FieldValue.arrayUnion([product]),
       });
-      print("data added");
+      // print("data added");
     } catch (err) {
-      print(err);
+      // print(err);
+      String errMsg = "Unable To Add Product!";
+      errorDialog(ctx, errMsg);
     }
     notifyListeners();
   }

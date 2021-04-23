@@ -1,11 +1,11 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:anybuy/widgets/InputFieldDec.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class AuthHome extends StatefulWidget {
   @override
@@ -20,6 +20,24 @@ class _AuthHomeState extends State<AuthHome> {
   String lastName = "";
   bool wantSignup = false;
 
+  void _errorDialog(String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("An ERROR Occurred"),
+        content: Text(errorMessage),
+        actions: [
+          TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authData = Provider.of<AuthData>(context);
@@ -30,7 +48,7 @@ class _AuthHomeState extends State<AuthHome> {
       }
       _authHomeKey.currentState.save();
       if (!wantSignup) {
-        await authData.login(userEmail, userPass);
+        await authData.login(userEmail, userPass,context);
         if (authData.currentUserData.isNotEmpty)
           await Navigator.of(context).pushReplacementNamed(homeScreen);
       } else {
@@ -39,6 +57,7 @@ class _AuthHomeState extends State<AuthHome> {
           pass: userPass,
           firstname: firstName,
           lastname: lastName,
+          ctx: context,
         );
       }
     }

@@ -4,8 +4,8 @@ import 'package:anybuy/widgets/Outlet_Item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/Drawer.dart';
 import '../widgets/Categories.dart';
+import '../widgets/Drawer.dart';
 import '../widgets/Search.dart';
 
 class UserHome extends StatelessWidget {
@@ -50,6 +50,7 @@ class UserHome extends StatelessWidget {
                   Categories(),
                   ListView.builder(
                     shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (ctx, index) {
                       return OutletItem(
                         outletName: sd[index][outletName],

@@ -1,9 +1,10 @@
 import 'package:anybuy/constants.dart';
+import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:anybuy/widgets/InputFieldDec.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:provider/provider.dart';
+
 import '../../widgets/Categories.dart';
 
 class AuthMerchant extends StatefulWidget {
@@ -31,7 +32,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
       }
       _authMerchantKey.currentState.save();
       if (!wantSignup) {
-        await authData.login(merchEmail, merchPass);
+        await authData.login(merchEmail, merchPass, context);
         if (authData.currentUserData.isNotEmpty)
           await Navigator.of(context).pushReplacementNamed(homeScreen);
       } else {
@@ -42,6 +43,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
           lastname: merchLastName,
           outletName: outletName,
           category: category,
+          ctx: context,
         );
       }
     }

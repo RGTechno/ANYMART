@@ -25,3 +25,21 @@ Color color1 = Colors.deepPurpleAccent;
 Color color2 = Colors.white70;
 Color color3 = Colors.pink;
 Color color4 = Colors.redAccent;
+
+void errorDialog(BuildContext ctx,String errorMessage) {
+  showDialog(
+    context: ctx,
+    builder: (ctx) => AlertDialog(
+      title: Text("An ERROR Occurred"),
+      content: Text(errorMessage),
+      actions: [
+        TextButton(
+          child: Text("OK"),
+          onPressed: () {
+            Navigator.of(ctx).pop();
+          },
+        ),
+      ],
+    ),
+  );
+}

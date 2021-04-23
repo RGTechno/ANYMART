@@ -36,7 +36,7 @@ class Outlet extends StatelessWidget {
 
           return sdp.length == 0
               ? Center(
-                  child: CircularProgressIndicator(),
+                  child: Text("No Products For This Outlet"),
                 )
               : SingleChildScrollView(
                   child: Column(
@@ -56,6 +56,7 @@ class Outlet extends StatelessWidget {
                       ),
                       ListView.builder(
                         shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (ctx, index) {
                           return UserProductItem(
                             productId: sdp[index]["productId"],

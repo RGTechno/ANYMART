@@ -1,7 +1,7 @@
 import 'package:anybuy/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthData with ChangeNotifier {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -26,15 +26,16 @@ class AuthData with ChangeNotifier {
   Future<void> createOutlet(
     String id,
     String name,
-    String outletName,
+    String inputOutletName,
     String cat,
   ) async {
     try {
       await firestore.collection("/$outletsCollection").add({
-        "merchantId": id,
-        "merchantName": name,
-        "outletName": outletName,
-        "category": cat,
+        merchantId: id,
+        merchantName: name,
+        outletName: inputOutletName,
+        category: cat,
+        products: [],
       });
     } catch (err) {
       print(err);
@@ -46,8 +47,9 @@ class AuthData with ChangeNotifier {
     @required String pass,
     @required String firstname,
     @required String lastname,
+    BuildContext ctx,
   }) async {
-    print("create user running");
+    // print("create user running");
     try {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
@@ -80,11 +82,15 @@ class AuthData with ChangeNotifier {
         "User Created ${userCredential.user.email}, ${userCredential.user.uid}",
       );
     } on FirebaseAuthException catch (e) {
+      String errMessage = "Unable To Create User!";
       if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
+        errMessage = 'The account already exists for that email.';
+        errorDialog(ctx, errMessage);
+      } else
+        errorDialog(ctx, errMessage);
     } catch (e) {
-      print(e);
+      // print(e);
+      errorDialog(ctx, "${e.message}");
     }
   }
 
@@ -95,6 +101,7 @@ class AuthData with ChangeNotifier {
     @required String lastname,
     @required String outletName,
     @required String category,
+    BuildContext ctx,
   }) async {
     print("create user running");
     try {
@@ -142,15 +149,19 @@ class AuthData with ChangeNotifier {
         "User Created ${userCredential.user.email}, ${userCredential.user.uid}",
       );
     } on FirebaseAuthException catch (e) {
+      String errMessage = "Unable To Create Merchant!";
       if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
+        errMessage = 'The account already exists for that email.';
+        errorDialog(ctx, errMessage);
+      } else
+        errorDialog(ctx, errMessage);
     } catch (e) {
-      print(e);
+      // print(e);
+      errorDialog(ctx, "${e.message}");
     }
   }
 
-  Future<void> login(String email, String pass) async {
+  Future<void> login(String email, String pass, BuildContext ctx) async {
     print("login running");
     _currentUserData.clear();
 
@@ -163,11 +174,15 @@ class AuthData with ChangeNotifier {
       print(userCredential.user.email);
       await getCurrentUserData();
     } on FirebaseAuthException catch (e) {
+      String errMessage = "Unable To Authenticate!";
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        errMessage = 'No user found for that email.';
+        errorDialog(ctx, errMessage);
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
+        errMessage = 'Wrong password provided for that user.';
+        errorDialog(ctx, errMessage);
+      } else
+        errorDialog(ctx, errMessage);
     }
   }
 
