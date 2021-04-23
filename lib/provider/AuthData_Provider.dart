@@ -40,6 +40,7 @@ class AuthData with ChangeNotifier {
     } catch (err) {
       print(err);
     }
+    notifyListeners();
   }
 
   void createUser({

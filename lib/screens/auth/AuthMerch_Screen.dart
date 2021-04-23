@@ -14,6 +14,13 @@ class AuthMerchant extends StatefulWidget {
 
 class _AuthMerchantState extends State<AuthMerchant> {
   final _authMerchantKey = GlobalKey<FormState>();
+
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _outletController = TextEditingController();
+
   String merchEmail = "";
   String merchPass = "";
   String merchFirstName = "";
@@ -44,6 +51,12 @@ class _AuthMerchantState extends State<AuthMerchant> {
 
   @override
   void dispose() {
+    _firstNameController.clear();
+    _lastNameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+    _outletController.clear();
+
     _email.dispose();
     _password.dispose();
     _firstName.dispose();
@@ -78,6 +91,11 @@ class _AuthMerchantState extends State<AuthMerchant> {
           category: category,
           ctx: context,
         );
+        _firstNameController.clear();
+        _lastNameController.clear();
+        _emailController.clear();
+        _passwordController.clear();
+        _outletController.clear();
       }
     }
 
@@ -122,6 +140,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
+                                controller: _firstNameController,
                                 focusNode: _firstName,
                                 decoration: inpDec(
                                   "First Name",
@@ -151,6 +170,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
+                                controller: _lastNameController,
                                 focusNode: _lastName,
                                 decoration: inpDec(
                                   "Last Name",
@@ -178,6 +198,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                       Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: TextFormField(
+                          controller: _emailController,
                           focusNode: _email,
                           decoration: inpDec(
                             "Enter Email-ID",
@@ -204,6 +225,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                       Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: TextFormField(
+                          controller: _passwordController,
                           focusNode: _password,
                           decoration: inpDec(
                             "Enter Password",
@@ -235,6 +257,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
+                                controller: _outletController,
                                 focusNode: _outletName,
                                 decoration: inpDec(
                                   "Outlet Name",

@@ -15,6 +15,10 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   final _addProductFormKey = GlobalKey<FormState>();
 
+  TextEditingController _productNameController = TextEditingController();
+  TextEditingController _countController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
+
   String proName = "";
   double countInStock;
   double price;
@@ -35,6 +39,10 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   void dispose() {
+    _productNameController.clear();
+    _countController.clear();
+    _priceController.clear();
+
     _name.dispose();
     _count.dispose();
     _price.dispose();
@@ -62,6 +70,9 @@ class _AddProductState extends State<AddProduct> {
           "price": price,
         },
       );
+      _productNameController.clear();
+      _countController.clear();
+      _priceController.clear();
     }
 
     return GestureDetector(
@@ -104,6 +115,7 @@ class _AddProductState extends State<AddProduct> {
                         Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: TextFormField(
+                            controller: _productNameController,
                             focusNode: _name,
                             decoration: inpDec(
                               "Product Name",
@@ -130,6 +142,7 @@ class _AddProductState extends State<AddProduct> {
                         Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: TextFormField(
+                            controller: _countController,
                             focusNode: _count,
                             decoration: inpDec(
                               "Count In Stock",
@@ -157,6 +170,7 @@ class _AddProductState extends State<AddProduct> {
                         Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: TextFormField(
+                            controller: _priceController,
                             focusNode: _price,
                             decoration: inpDec(
                               "Price in INR",

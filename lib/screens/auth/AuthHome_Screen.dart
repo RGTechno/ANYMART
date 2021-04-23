@@ -14,6 +14,12 @@ class AuthHome extends StatefulWidget {
 
 class _AuthHomeState extends State<AuthHome> {
   final _authHomeKey = GlobalKey<FormState>();
+
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
   String userEmail = "";
   String userPass = "";
   String firstName = "";
@@ -38,6 +44,11 @@ class _AuthHomeState extends State<AuthHome> {
 
   @override
   void dispose() {
+    _firstNameController.clear();
+    _lastNameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+
     _email.dispose();
     _password.dispose();
     _firstName.dispose();
@@ -68,6 +79,10 @@ class _AuthHomeState extends State<AuthHome> {
           lastname: lastName,
           ctx: context,
         );
+        _firstNameController.clear();
+        _lastNameController.clear();
+        _emailController.clear();
+        _passwordController.clear();
       }
     }
 
@@ -135,6 +150,7 @@ class _AuthHomeState extends State<AuthHome> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
+                                controller: _firstNameController,
                                 focusNode: _firstName,
                                 decoration: inpDec(
                                   "First Name",
@@ -164,6 +180,7 @@ class _AuthHomeState extends State<AuthHome> {
                           ? Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
+                                controller: _lastNameController,
                                 focusNode: _lastName,
                                 decoration: inpDec(
                                   "Last Name",
@@ -191,6 +208,7 @@ class _AuthHomeState extends State<AuthHome> {
                       Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: TextFormField(
+                          controller: _emailController,
                           focusNode: _email,
                           decoration: inpDec(
                             "Enter Email-ID",
@@ -217,6 +235,7 @@ class _AuthHomeState extends State<AuthHome> {
                       Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: TextFormField(
+                          controller: _passwordController,
                           focusNode: _password,
                           decoration: inpDec(
                             "Enter Password",
