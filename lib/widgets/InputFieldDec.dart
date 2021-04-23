@@ -18,10 +18,10 @@ InputDecoration inpDec(
         : null,
     hintStyle: GoogleFonts.poppins(fontSize: 13),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(15),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(15),
       borderSide: BorderSide(color: Colors.tealAccent),
     ),
   );

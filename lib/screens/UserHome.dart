@@ -1,12 +1,12 @@
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/Outlet_Provider.dart';
+import 'package:anybuy/widgets/AppHeader.dart';
 import 'package:anybuy/widgets/Outlet_Item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/Categories.dart';
 import '../widgets/Drawer.dart';
-import '../widgets/Search.dart';
 
 class UserHome extends StatelessWidget {
   @override
@@ -17,22 +17,8 @@ class UserHome extends StatelessWidget {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        drawer: DrawerMenu(),
-        appBar: AppBar(
-          title: Text(
-            "ANYBUY",
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 40,
-            ),
-          ),
-          iconTheme: IconThemeData(
-            color: Colors.black87,
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
+        drawer: new DrawerMenu(),
+        appBar: appHeader(context),
         body: FutureBuilder(
           future: outletData.getAllOutlets(),
           builder: (ctx, snapshot) {
@@ -45,9 +31,31 @@ class UserHome extends StatelessWidget {
             var sd = snapshot.data;
             return SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SearchBar(),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      "Explore Categories",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 21,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
                   Categories(),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      "Discover Outlets",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 21,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -55,6 +63,7 @@ class UserHome extends StatelessWidget {
                       return OutletItem(
                         outletName: sd[index][outletName],
                         id: sd[index][outletId],
+                        category: sd[index][category],
                       );
                     },
                     itemCount: sd.length,

@@ -1,4 +1,5 @@
 import 'package:anybuy/constants.dart';
+import 'package:anybuy/widgets/AppHeader.dart';
 import 'package:anybuy/widgets/OutletHeader.dart';
 import 'package:anybuy/widgets/UserProduct_Item.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,14 +16,7 @@ class Outlet extends StatelessWidget {
     final outletId = ModalRoute.of(context).settings.arguments as String;
 
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black87,
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: appHeader(context),
       body: FutureBuilder(
         future: outletData.getOutletById(outletId),
         builder: (ctx, snapshot) {

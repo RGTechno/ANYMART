@@ -1,8 +1,8 @@
+import 'package:anybuy/constants.dart';
+import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:anybuy/constants.dart';
-import 'package:anybuy/provider/AuthData_Provider.dart';
 
 class DrawerMenu extends StatelessWidget {
   @override
@@ -27,7 +27,14 @@ class DrawerMenu extends StatelessWidget {
               milliseconds: 300,
             ),
             decoration: BoxDecoration(
-              color: Colors.tealAccent,
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  color1,
+                  color2,
+                ],
+              ),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),

@@ -1,5 +1,6 @@
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/AuthData_Provider.dart';
+import 'package:anybuy/widgets/AppHeader.dart';
 import 'package:anybuy/widgets/InputFieldDec.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -104,13 +105,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          iconTheme: IconThemeData(
-            color: Colors.black87,
-          ),
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: appHeader(context),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

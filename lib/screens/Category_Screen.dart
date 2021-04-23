@@ -1,4 +1,5 @@
 import 'package:anybuy/provider/Outlet_Provider.dart';
+import 'package:anybuy/widgets/AppHeader.dart';
 import 'package:anybuy/widgets/Outlet_Item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,21 +14,7 @@ class CategoryScreen extends StatelessWidget {
     final categoryArgs = ModalRoute.of(context).settings.arguments as Map;
     final String cat = categoryArgs["category"];
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "${categoryArgs["category"]}",
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.black87,
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: appHeader(context),
       body: FutureBuilder(
         future: outletData.getOutletsByCategory(cat),
         builder: (ctx, snapshot) {
@@ -48,6 +35,7 @@ class CategoryScreen extends StatelessWidget {
                     return OutletItem(
                       outletName: sd[index][outletName],
                       id: sd[index][outletId],
+                      category: sd[index][category],
                     );
                   },
                   itemCount: sd.length,
