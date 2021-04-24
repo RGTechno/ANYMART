@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -6,11 +7,13 @@ class OutletItem extends StatelessWidget {
   final String id;
   final String outletName;
   final String category;
+  final String outletImage;
 
   OutletItem({
     @required this.outletName,
     @required this.id,
     @required this.category,
+    @required this.outletImage,
   });
 
   @override
@@ -38,14 +41,10 @@ class OutletItem extends StatelessWidget {
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
                       ),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          color3,
-                          color4,
-                        ],
-                      ),
+                    ),
+                    child: Image.network(
+                      outletImage,
+                      fit: BoxFit.cover,
                     ),
                     width: double.infinity,
                     height: 200,

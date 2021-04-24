@@ -56,18 +56,23 @@ class UserHome extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (ctx, index) {
-                      return OutletItem(
-                        outletName: sd[index][outletName],
-                        id: sd[index][outletId],
-                        category: sd[index][category],
-                      );
-                    },
-                    itemCount: sd.length,
-                  ),
+                  sd.length == 0
+                      ? Center(
+                          child: Text("No Outlets Yet!!"),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (ctx, index) {
+                            return OutletItem(
+                              outletName: sd[index][outletName],
+                              id: sd[index][outletId],
+                              category: sd[index][category],
+                              outletImage: sd[index][outletImg],
+                            );
+                          },
+                          itemCount: sd.length,
+                        ),
                 ],
               ),
             );

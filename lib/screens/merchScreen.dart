@@ -1,11 +1,12 @@
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/widgets/AppHeader.dart';
+import 'package:anybuy/widgets/Drawer.dart';
 import 'package:anybuy/widgets/MerchProduct_Item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../provider/AuthData_Provider.dart';
 import '../provider/MerchantData_Provider.dart';
-import 'package:anybuy/widgets/Drawer.dart';
 
 class MerchScreen extends StatelessWidget {
   @override
@@ -27,7 +28,7 @@ class MerchScreen extends StatelessWidget {
             );
           }
           var sdp = snapshot.data[products];
-          return sdp == null
+          return sdp.length == 0
               ? Center(
                   child: Text("No Products Added Yet"),
                 )

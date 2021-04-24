@@ -35,6 +35,8 @@ dependencies:
   provider: ^5.0.0
   uuid: ^3.0.4
   flutter_svg: ^0.22.0
+  image_picker: ^0.7.4
+  firebase_storage: ^8.0.4
 
 dev_dependencies:
   flutter_test:

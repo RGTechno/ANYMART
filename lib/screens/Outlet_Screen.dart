@@ -36,7 +36,10 @@ class Outlet extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      OutletHeader(outletName: snapshot.data["outletName"]),
+                      OutletHeader(
+                        outletName: snapshot.data[outletName],
+                        outletImage: snapshot.data[outletImg],
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Text(

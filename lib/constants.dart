@@ -20,6 +20,7 @@ const merchantId = "merchantId";
 const outletName = "outletName";
 const category = "category";
 const outletId = "outletId";
+const outletImg = "outletImageURL";
 
 Color color1 = Colors.deepPurpleAccent;
 Color color2 = Colors.white70;

@@ -36,6 +36,7 @@ class CategoryScreen extends StatelessWidget {
                       outletName: sd[index][outletName],
                       id: sd[index][outletId],
                       category: sd[index][category],
+                      outletImage: sd[index][outletImg],
                     );
                   },
                   itemCount: sd.length,

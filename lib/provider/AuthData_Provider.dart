@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:anybuy/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 
 class AuthData with ChangeNotifier {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
 
   FirebaseAuth get auth {
     return _auth;
@@ -28,6 +33,7 @@ class AuthData with ChangeNotifier {
     String name,
     String inputOutletName,
     String cat,
+    String imageUrl,
   ) async {
     try {
       await firestore.collection("/$outletsCollection").add({
@@ -36,6 +42,7 @@ class AuthData with ChangeNotifier {
         outletName: inputOutletName,
         category: cat,
         products: [],
+        outletImg: imageUrl,
       });
     } catch (err) {
       print(err);
@@ -111,6 +118,7 @@ class AuthData with ChangeNotifier {
     @required String lastname,
     @required String outletName,
     @required String category,
+    File outletImage,
     BuildContext ctx,
   }) async {
     print("create user running");
@@ -119,6 +127,13 @@ class AuthData with ChangeNotifier {
         email: email,
         password: pass,
       );
+
+      final ref =
+          storage.ref().child("outlet_images").child(userCredential.user.uid);
+
+      await ref.putFile(outletImage);
+
+      final url = await ref.getDownloadURL();
 
       await firestore
           .collection(allUserCollection)
@@ -153,6 +168,7 @@ class AuthData with ChangeNotifier {
         "$firstname $lastname",
         outletName,
         category,
+        url,
       );
 
       ScaffoldMessenger.of(ctx).showSnackBar(

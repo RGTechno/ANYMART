@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
 import "../constants.dart";
 
 class OutletData with ChangeNotifier {
@@ -19,6 +20,7 @@ class OutletData with ChangeNotifier {
           outletName: outlet[outletName],
           merchantId: outlet[merchantId],
           products: outlet[products],
+          outletImg: outlet[outletImg],
         });
       });
       print(outlets);
@@ -48,6 +50,7 @@ class OutletData with ChangeNotifier {
           outletName: outlet[outletName],
           merchantId: outlet[merchantId],
           products: outlet[products],
+          outletImg: outlet[outletImg],
         });
       });
       // print(catOutlets);

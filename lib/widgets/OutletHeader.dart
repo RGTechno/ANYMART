@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-
 class OutletHeader extends StatelessWidget {
   final String outletName;
+  final String outletImage;
 
-  OutletHeader({@required this.outletName});
+  OutletHeader({
+    @required this.outletName,
+    this.outletImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +80,11 @@ class OutletHeader extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    color3,
-                    color4,
-                  ],
-                ),
                 borderRadius: BorderRadius.circular(20),
+              ),
+              child: Image.network(
+                outletImage,
+                fit: BoxFit.cover,
               ),
               height: 100,
               width: 100,

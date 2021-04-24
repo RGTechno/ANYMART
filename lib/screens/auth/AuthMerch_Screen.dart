@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:anybuy/widgets/AppHeader.dart';
+import 'package:anybuy/widgets/ImagePicker.dart';
 import 'package:anybuy/widgets/InputFieldDec.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +17,12 @@ class AuthMerchant extends StatefulWidget {
 }
 
 class _AuthMerchantState extends State<AuthMerchant> {
+  File _imagePick;
+
+  void _imagePicked(File image) {
+    _imagePick = image;
+  }
+
   final _authMerchantKey = GlobalKey<FormState>();
 
   TextEditingController _firstNameController = TextEditingController();
@@ -83,20 +92,25 @@ class _AuthMerchantState extends State<AuthMerchant> {
         if (authData.currentUserData.isNotEmpty)
           await Navigator.of(context).pushReplacementNamed(homeScreen);
       } else {
-        authData.createMerchant(
-          email: merchEmail,
-          pass: merchPass,
-          firstname: merchFirstName,
-          lastname: merchLastName,
-          outletName: outletName,
-          category: category,
-          ctx: context,
-        );
-        _firstNameController.clear();
-        _lastNameController.clear();
-        _emailController.clear();
-        _passwordController.clear();
-        _outletController.clear();
+        if (_imagePick == null)
+          errorDialog(context, "Submit An Image");
+        else {
+          authData.createMerchant(
+            email: merchEmail,
+            pass: merchPass,
+            firstname: merchFirstName,
+            lastname: merchLastName,
+            outletName: outletName,
+            category: category,
+            ctx: context,
+            outletImage: _imagePick,
+          );
+          _firstNameController.clear();
+          _lastNameController.clear();
+          _emailController.clear();
+          _passwordController.clear();
+          _outletController.clear();
+        }
       }
     }
 
@@ -115,7 +129,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
                 color2,
                 color1,
               ],
-              stops: [0.85, 0.1],
+              stops: [0.95, 0.05],
             ),
           ),
           padding: EdgeInsets.all(10),
@@ -125,6 +139,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                if (wantSignup) ImgPicker(_imagePicked),
                 Form(
                   key: _authMerchantKey,
                   child: Column(
