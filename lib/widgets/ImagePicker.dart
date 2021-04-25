@@ -60,7 +60,7 @@ class _ImgPickerState extends State<ImgPicker> {
                 _pickedImage != null ? FileImage(_pickedImage) : null,
             child: Icon(
               Icons.camera_alt_outlined,
-              color: Colors.black,
+              color: _pickedImage != null ? Colors.white : Colors.black,
             ),
           ),
         ),

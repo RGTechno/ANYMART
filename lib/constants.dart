@@ -21,6 +21,11 @@ const outletName = "outletName";
 const category = "category";
 const outletId = "outletId";
 const outletImg = "outletImageURL";
+const productId = "productId";
+const productName = "productName";
+const countInStock = "countInStock";
+const productPrice = "price";
+const productImg = "productImageURL";
 
 Color color1 = Colors.deepPurpleAccent;
 Color color2 = Colors.white70;

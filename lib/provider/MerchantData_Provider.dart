@@ -1,21 +1,48 @@
+import 'dart:io';
+
 import 'package:anybuy/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class MerchantData with ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
 
   Map<String, dynamic> currentUserProduct = {};
   String currentUserOutletId;
 
-  Future<void> addProduct(BuildContext ctx, Map product) async {
+  Future<void> addProduct({
+    BuildContext ctx,
+    String proName,
+    double count,
+    double price,
+    File image,
+  }) async {
     print(currentUserOutletId);
     try {
+      final ref =
+          storage.ref().child("product_images").child(currentUserOutletId);
+
+      await ref.putFile(image);
+
+      final url = await ref.getDownloadURL();
+
       await firestore
           .collection(outletsCollection)
           .doc(currentUserOutletId)
           .update({
-        products: FieldValue.arrayUnion([product]),
+        products: FieldValue.arrayUnion([
+          {
+            productId: Uuid().v4(),
+            productName: proName,
+            countInStock: count,
+            productPrice: price,
+            productImg: url,
+          }
+        ]),
       });
       // print("data added");
       ScaffoldMessenger.of(ctx).showSnackBar(

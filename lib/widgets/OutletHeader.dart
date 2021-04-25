@@ -81,13 +81,19 @@ class OutletHeader extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
+                color: Colors.blue
               ),
-              child: Image.network(
-                outletImage,
-                fit: BoxFit.cover,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
+                  outletImage,
+                  height: 150,
+                  width: 120,
+                  fit: BoxFit.cover,
+                ),
               ),
-              height: 100,
-              width: 100,
+              height: 150,
+              width: 120,
             ),
           ),
         ],

@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:anybuy/provider/MerchantData_Provider.dart';
 import 'package:anybuy/widgets/AppHeader.dart';
+import 'package:anybuy/widgets/ImagePicker.dart';
 import 'package:anybuy/widgets/InputFieldDec.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 
@@ -14,6 +16,12 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
+  File _imagePick;
+
+  void _imagePicked(File image) {
+    _imagePick = image;
+  }
+
   final _addProductFormKey = GlobalKey<FormState>();
 
   TextEditingController _productNameController = TextEditingController();
@@ -62,18 +70,20 @@ class _AddProductState extends State<AddProduct> {
         return;
       }
       _addProductFormKey.currentState.save();
-      await merchantData.addProduct(
-        context,
-        {
-          "productId": Uuid().v4(),
-          "productName": proName,
-          "countInStock": countInStock,
-          "price": price,
-        },
-      );
-      _productNameController.clear();
-      _countController.clear();
-      _priceController.clear();
+      if (_imagePick == null)
+        errorDialog(context, "Submit An Image");
+      else {
+        await merchantData.addProduct(
+          ctx: context,
+          proName: proName,
+          image: _imagePick,
+          count: countInStock,
+          price: price,
+        );
+        _productNameController.clear();
+        _countController.clear();
+        _priceController.clear();
+      }
     }
 
     return GestureDetector(
@@ -101,6 +111,7 @@ class _AddProductState extends State<AddProduct> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                ImgPicker(_imagePicked),
                 Form(
                   key: _addProductFormKey,
                   child: Column(

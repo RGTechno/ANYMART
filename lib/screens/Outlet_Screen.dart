@@ -56,11 +56,12 @@ class Outlet extends StatelessWidget {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (ctx, index) {
                           return UserProductItem(
-                            productId: sdp[index]["productId"],
-                            productName: sdp[index]["productName"],
+                            productId: sdp[index][productId],
+                            productName: sdp[index][productName],
                             productPrice: double.parse(
-                              sdp[index]["price"].toString(),
+                              sdp[index][productPrice].toString(),
                             ),
+                            image: sdp[index][productImg],
                           );
                         },
                         itemCount: sdp.length,

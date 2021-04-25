@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-
 class MerchantProductItem extends StatelessWidget {
   final String proId;
   final String proName;
   final double countInStock;
   final double price;
+  final String image;
 
   MerchantProductItem({
     @required this.proId,
     @required this.proName,
     @required this.countInStock,
     @required this.price,
+    @required this.image,
   });
 
   @override
@@ -21,18 +21,12 @@ class MerchantProductItem extends StatelessWidget {
       elevation: 5,
       child: ListTile(
         leading: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomRight,
-              colors: [
-                color3,
-                color4,
-              ],
-            ),
+          child: Image.network(
+            image,
+            fit: BoxFit.cover,
           ),
-          height: 40,
-          width: 40,
+          height: 100,
+          width: 100,
         ),
         title: Text(proName),
         subtitle: Text(

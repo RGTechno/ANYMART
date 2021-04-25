@@ -34,14 +34,15 @@ class MerchScreen extends StatelessWidget {
                 )
               : ListView.builder(
                   itemBuilder: (ctx, index) => MerchantProductItem(
-                    proId: sdp[index]["productId"],
-                    proName: sdp[index]["productName"],
+                    proId: sdp[index][productId],
+                    proName: sdp[index][productName],
                     countInStock: double.parse(
-                      sdp[index]["countInStock"].toString(),
+                      sdp[index][countInStock].toString(),
                     ),
                     price: double.parse(
-                      sdp[index]["price"].toString(),
+                      sdp[index][productPrice].toString(),
                     ),
+                    image: sdp[index][productImg],
                   ),
                   itemCount: sdp.length,
                 );

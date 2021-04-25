@@ -8,6 +8,7 @@ class UserProductItem extends StatelessWidget {
   final String productId;
   final String productName;
   final double productPrice;
+  final String image;
 
   // TODO:final String productDescription;
 
@@ -15,6 +16,7 @@ class UserProductItem extends StatelessWidget {
     @required this.productId,
     @required this.productName,
     @required this.productPrice,
+    @required this.image,
   });
 
   @override
@@ -32,18 +34,14 @@ class UserProductItem extends StatelessWidget {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        color3,
-                        color4,
-                      ],
-                    ),
+                  child: Image.network(
+                    image,
+                    height: 500,
+                    width: 500,
+                    fit: BoxFit.cover,
                   ),
-                  height: 50,
-                  width: 50,
+                  height: 100,
+                  width: 100,
                 ),
               ],
             ),
@@ -55,7 +53,7 @@ class UserProductItem extends StatelessWidget {
             ),
             leading: TextButton.icon(
               onPressed: () {
-                showModal(context, productName, productPrice);
+                showModal(context, productName, productPrice, image);
               },
               icon: Icon(
                 Icons.add,
@@ -79,7 +77,7 @@ class UserProductItem extends StatelessWidget {
               ),
             ),
             onTap: () {
-              showModal(context, productName, productPrice);
+              showModal(context, productName, productPrice, image);
             },
           ),
           height: 100,
@@ -90,7 +88,7 @@ class UserProductItem extends StatelessWidget {
   }
 }
 
-void showModal(BuildContext ctx, String name, double price) {
+void showModal(BuildContext ctx, String name, double price, String img) {
   showModalBottomSheet<void>(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
@@ -140,13 +138,14 @@ void showModal(BuildContext ctx, String name, double price) {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          color3,
-                          color4,
-                        ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        img,
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     height: 100,
