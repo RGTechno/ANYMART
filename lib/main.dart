@@ -1,8 +1,10 @@
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/AuthData_Provider.dart';
+import 'package:anybuy/provider/Cart_Provider.dart';
 import 'package:anybuy/provider/MerchantData_Provider.dart';
 import 'package:anybuy/provider/Outlet_Provider.dart';
 import 'package:anybuy/screens/AddProduct_Screen.dart';
+import 'package:anybuy/screens/Cart_Screen.dart';
 import 'package:anybuy/screens/Category_Screen.dart';
 import 'package:anybuy/screens/Home_Screen.dart';
 import 'package:anybuy/screens/Outlet_Screen.dart';
@@ -42,6 +44,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => OutletData(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => CartData(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -53,6 +58,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: homeScreen,
         routes: {
+          cartScreen: (_) => Cart(),
           pageView: (_) => PageViewMainScreen(),
           homeScreen: (_) => HomeScreen(),
           authHome: (_) => AuthHome(),

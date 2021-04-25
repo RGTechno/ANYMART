@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CartCounter extends StatefulWidget {
+  static int qty=1;
   @override
   _CartCounterState createState() => _CartCounterState();
 }
 
 class _CartCounterState extends State<CartCounter> {
-  int numOfItem = 1;
+  // int numOfItem = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +18,9 @@ class _CartCounterState extends State<CartCounter> {
           BuildOutlinedButton(
             icon: Icons.remove,
             press: () {
-              if (numOfItem > 1) {
+              if (CartCounter.qty > 1) {
                 setState(() {
-                  numOfItem--;
+                  CartCounter.qty--;
                 });
               }
             },
@@ -27,14 +28,14 @@ class _CartCounterState extends State<CartCounter> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              numOfItem.toString().padLeft(2, "0"),
+              CartCounter.qty.toString().padLeft(2, "0"),
             ),
           ),
           BuildOutlinedButton(
             icon: Icons.add,
             press: () {
               setState(() {
-                numOfItem++;
+                CartCounter.qty++;
               });
             },
           ),

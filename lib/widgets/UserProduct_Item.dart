@@ -1,6 +1,8 @@
+import 'package:anybuy/provider/Cart_Provider.dart';
 import 'package:anybuy/widgets/cartCounter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 
@@ -9,6 +11,7 @@ class UserProductItem extends StatelessWidget {
   final String productName;
   final double productPrice;
   final String image;
+  final String category;
 
   // TODO:final String productDescription;
 
@@ -17,6 +20,7 @@ class UserProductItem extends StatelessWidget {
     @required this.productName,
     @required this.productPrice,
     @required this.image,
+    @required this.category,
   });
 
   @override
@@ -53,7 +57,13 @@ class UserProductItem extends StatelessWidget {
             ),
             leading: TextButton.icon(
               onPressed: () {
-                showModal(context, productName, productPrice, image);
+                showModal(
+                  context,
+                  productName,
+                  productPrice,
+                  image,
+                  category,
+                );
               },
               icon: Icon(
                 Icons.add,
@@ -77,7 +87,13 @@ class UserProductItem extends StatelessWidget {
               ),
             ),
             onTap: () {
-              showModal(context, productName, productPrice, image);
+              showModal(
+                context,
+                productName,
+                productPrice,
+                image,
+                category,
+              );
             },
           ),
           height: 100,
@@ -88,7 +104,15 @@ class UserProductItem extends StatelessWidget {
   }
 }
 
-void showModal(BuildContext ctx, String name, double price, String img) {
+void showModal(
+  BuildContext ctx,
+  String name,
+  double price,
+  String img,
+  String productCat,
+) {
+  final cartData = Provider.of<CartData>(ctx, listen: false);
+
   showModalBottomSheet<void>(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
@@ -171,7 +195,19 @@ void showModal(BuildContext ctx, String name, double price, String img) {
                           color3,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        cartData.addToCart(
+                          ctx,
+                          {
+                            productName: name,
+                            productPrice: price,
+                            productImg: img,
+                            "Quantity": CartCounter.qty,
+                          },
+                          productCat,
+                        );
+                        Navigator.of(context).pop();
+                      },
                       icon: Icon(Icons.add_shopping_cart_rounded),
                       label: Text("Add Item"),
                     ),

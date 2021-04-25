@@ -25,66 +25,70 @@ class OutletItem extends StatelessWidget {
           arguments: id,
         );
       },
-      child: ClipRRect(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
                     child: Image.network(
                       outletImage,
                       fit: BoxFit.cover,
                     ),
-                    width: double.infinity,
-                    height: 200,
                   ),
-                  Positioned(
-                    right: 0,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.favorite_border_rounded,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
+                  width: double.infinity,
+                  height: 200,
+                ),
+                Positioned(
+                  right: 0,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.favorite_border_rounded,
+                      color: Colors.white,
                     ),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+            ListTile(
+              title: Text(
+                outletName,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("4.1"),
+                  Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                    size: 20,
                   ),
                 ],
               ),
-              ListTile(
-                title: Text(
-                  outletName,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("4.1"),
-                    Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 20,
-                    ),
-                  ],
-                ),
-                subtitle: Text(category),
-              ),
-            ],
-          ),
+              subtitle: Text(category),
+            ),
+          ],
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:anybuy/constants.dart';
 import 'package:flutter/material.dart';
 
 AppBar appHeader(BuildContext ctx) {
@@ -8,7 +9,9 @@ AppBar appHeader(BuildContext ctx) {
     actions: [
       IconButton(
         icon: Icon(Icons.shopping_cart_outlined),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(ctx).pushNamed(cartScreen);
+        },
       ),
     ],
     elevation: 0,

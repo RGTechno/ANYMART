@@ -6,6 +6,7 @@ const merchAuth = "/authMerchant";
 const addProduct = "/addProduct";
 const singleCategoryScreen = "/catScreen";
 const outletScreen = "/outletScreen";
+const cartScreen = "/cartScreen";
 const pageView = "/pageViewScreen";
 
 const userCollection = "users";

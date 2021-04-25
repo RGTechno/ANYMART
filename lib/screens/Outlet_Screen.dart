@@ -62,6 +62,7 @@ class Outlet extends StatelessWidget {
                               sdp[index][productPrice].toString(),
                             ),
                             image: sdp[index][productImg],
+                            category: snapshot.data[category],
                           );
                         },
                         itemCount: sdp.length,
