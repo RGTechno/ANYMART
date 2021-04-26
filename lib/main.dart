@@ -52,7 +52,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'AnyBuy',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: color3,
+          accentColor: color4,
           fontFamily: "Poppins",
           errorColor: Colors.red,
         ),
