@@ -12,6 +12,7 @@ class UserProductItem extends StatelessWidget {
   final double productPrice;
   final String image;
   final String category;
+  final double count;
 
   // TODO:final String productDescription;
 
@@ -21,6 +22,7 @@ class UserProductItem extends StatelessWidget {
     @required this.productPrice,
     @required this.image,
     @required this.category,
+    @required this.count,
   });
 
   @override
@@ -59,10 +61,12 @@ class UserProductItem extends StatelessWidget {
               onPressed: () {
                 showModal(
                   context,
+                  productId,
                   productName,
                   productPrice,
                   image,
                   category,
+                  count,
                 );
               },
               icon: Icon(
@@ -89,10 +93,12 @@ class UserProductItem extends StatelessWidget {
             onTap: () {
               showModal(
                 context,
+                productId,
                 productName,
                 productPrice,
                 image,
                 category,
+                count,
               );
             },
           ),
@@ -106,10 +112,12 @@ class UserProductItem extends StatelessWidget {
 
 void showModal(
   BuildContext ctx,
+  String proId,
   String name,
   double price,
   String img,
   String productCat,
+  double stockCount,
 ) {
   final cartData = Provider.of<CartData>(ctx, listen: false);
 
@@ -197,14 +205,14 @@ void showModal(
                       ),
                       onPressed: () {
                         cartData.addToCart(
-                          ctx,
-                          {
-                            productName: name,
-                            productPrice: price,
-                            productImg: img,
-                            "Quantity": CartCounter.qty,
-                          },
-                          productCat,
+                          ctx: ctx,
+                          productId: proId,
+                          price: price,
+                          productName: name,
+                          cat: productCat,
+                          countInStock: stockCount,
+                          qty: CartCounter.qty,
+                          img: img
                         );
                         Navigator.of(context).pop();
                       },
