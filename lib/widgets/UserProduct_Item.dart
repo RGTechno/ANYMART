@@ -3,6 +3,7 @@ import 'package:anybuy/widgets/cartCounter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 
@@ -188,7 +189,7 @@ void showModal(
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CartCounter(),
+                  CartCounter(stockCount),
                   Expanded(
                     flex: 2,
                     child: ElevatedButton.icon(
@@ -212,8 +213,11 @@ void showModal(
                           cat: productCat,
                           countInStock: stockCount,
                           qty: CartCounter.qty,
-                          img: img
+                          img: img,
                         );
+                        cartData.snackBar(ctx, () {
+                          cartData.removeAddedItem(proId, CartCounter.qty);
+                        });
                         Navigator.of(context).pop();
                       },
                       icon: Icon(Icons.add_shopping_cart_rounded),

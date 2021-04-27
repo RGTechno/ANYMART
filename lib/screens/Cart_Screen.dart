@@ -12,7 +12,7 @@ class Cart extends StatelessWidget {
     final cartData = Provider.of<CartData>(context);
     final cartItems = cartData.cartItems;
     // print(cartItems.values.toList());
-    print(cartData.cartItems);
+    // print(cartData.cartItems);
 
     return Scaffold(
       appBar: appHeader(context),
@@ -24,7 +24,7 @@ class Cart extends StatelessWidget {
               itemBuilder: (ctx, index) {
                 var cartItem = cartItems.values.toList()[index];
                 return UserCartItem(
-                  productId: cartItem.productId,
+                  productId: cartItems.keys.toList()[index],
                   productName: cartItem.productName,
                   price: cartItem.price,
                   quantity: cartItem.quantity,
