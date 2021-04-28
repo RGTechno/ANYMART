@@ -28,6 +28,14 @@ class CartData with ChangeNotifier {
     return {..._cartItems};
   }
 
+  double get totalAmount {
+    double total = 0;
+    _cartItems.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+    return total;
+  }
+
   void snackBar(BuildContext ctx, Function actionPress) {
     ScaffoldMessenger.of(ctx).showSnackBar(
       SnackBar(
@@ -37,7 +45,7 @@ class CartData with ChangeNotifier {
           onPressed: actionPress,
         ),
         duration: Duration(
-          seconds: 7,
+          seconds: 1,
         ),
       ),
     );
@@ -93,7 +101,8 @@ class CartData with ChangeNotifier {
     if (!_cartItems.containsKey(productId)) {
       return;
     }
-    if (_cartItems[productId].quantity > 1) {
+    if (_cartItems[productId].quantity > 1 &&
+        _cartItems[productId].quantity - quantity != 0) {
       _cartItems.update(
         productId,
         (existingItem) => CartItem(

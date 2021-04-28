@@ -2,6 +2,8 @@ import 'package:anybuy/provider/Cart_Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants.dart';
+
 class UserCartItem extends StatelessWidget {
   final String id;
   final String productId;
@@ -71,53 +73,67 @@ class UserCartItem extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-        child: Row(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        child: Column(
           children: [
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20), color: Colors.blue),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  proImg,
+            Row(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        color3,
+                        color4,
+                      ],
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      proImg,
+                      height: 75,
+                      width: 75,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   height: 75,
                   width: 75,
-                  fit: BoxFit.cover,
                 ),
-              ),
-              height: 75,
-              width: 75,
-            ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      productName,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          productName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text("\u{20B9}$price"),
+                        Text("Quantity: ${quantity}X"),
+                      ],
                     ),
-                    Text("\u{20B9}$price"),
-                    Text("Quantity: ${quantity}X"),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                "\u{20B9}$totalItemPrice",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    "\u{20B9}$totalItemPrice",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
+            Divider(),
           ],
         ),
       ),

@@ -23,8 +23,13 @@ class MerchantData with ChangeNotifier {
   }) async {
     print(currentUserOutletId);
     try {
-      final ref =
-          storage.ref().child("product_images").child(currentUserOutletId);
+      final ref = storage
+          .ref()
+          .child("product_images")
+          .child(currentUserOutletId)
+          .child(
+            Uuid().v4(),
+          );
 
       await ref.putFile(image);
 

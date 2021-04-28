@@ -3,7 +3,6 @@ import 'package:anybuy/widgets/cartCounter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 
@@ -41,6 +40,16 @@ class UserProductItem extends StatelessWidget {
               children: [
                 Container(
                   alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        color3,
+                        color4,
+                      ],
+                    ),
+                  ),
                   child: Image.network(
                     image,
                     height: 500,
@@ -171,6 +180,14 @@ void showModal(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          color3,
+                          color4,
+                        ],
+                      ),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
