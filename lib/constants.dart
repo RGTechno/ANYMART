@@ -8,6 +8,7 @@ const singleCategoryScreen = "/catScreen";
 const outletScreen = "/outletScreen";
 const cartScreen = "/cartScreen";
 const pageView = "/pageViewScreen";
+const placeOrderScreen = "/placeOrderScreen";
 
 const userCollection = "users";
 const merchantCollection = "merchant";

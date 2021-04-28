@@ -1,3 +1,4 @@
+import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:anybuy/provider/Cart_Provider.dart';
 import 'package:anybuy/widgets/AppHeader.dart';
 import 'package:anybuy/widgets/Cart_Item.dart';
@@ -12,6 +13,7 @@ class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartData = Provider.of<CartData>(context);
+    final authState = Provider.of<AuthData>(context).auth.currentUser;
     final cartItems = cartData.cartItems;
     // print(cartItems.values.toList());
     // print(cartData.cartItems);
@@ -32,7 +34,13 @@ class Cart extends StatelessWidget {
                   Divider(thickness: 0),
                   TotalAmount("Total:", cartData.totalAmount + 15),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if (authState == null) {
+                        Navigator.of(context).pushReplacementNamed(authHome);
+                      } else
+                        Navigator.of(context)
+                            .pushReplacementNamed(placeOrderScreen);
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
