@@ -9,6 +9,7 @@ class DrawerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final authData = Provider.of<AuthData>(context);
     var user;
+    authData.getCurrentUserData();
     final currentUserData = authData.currentUserData;
     if (currentUserData.isNotEmpty) {
       user = authData.auth.currentUser;

@@ -35,6 +35,7 @@ class Cart extends StatelessWidget {
                   TotalAmount("Total:", cartData.totalAmount + 15),
                   GestureDetector(
                     onTap: () {
+                      print(authState);
                       if (authState == null) {
                         Navigator.of(context).pushReplacementNamed(authHome);
                       } else
