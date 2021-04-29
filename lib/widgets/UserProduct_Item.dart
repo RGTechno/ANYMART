@@ -13,6 +13,7 @@ class UserProductItem extends StatelessWidget {
   final String image;
   final String category;
   final double count;
+  final String outletId;
 
   // TODO:final String productDescription;
 
@@ -23,6 +24,7 @@ class UserProductItem extends StatelessWidget {
     @required this.image,
     @required this.category,
     @required this.count,
+    @required this.outletId,
   });
 
   @override
@@ -77,6 +79,7 @@ class UserProductItem extends StatelessWidget {
                   image,
                   category,
                   count,
+                  outletId,
                 );
               },
               icon: Icon(
@@ -109,6 +112,7 @@ class UserProductItem extends StatelessWidget {
                 image,
                 category,
                 count,
+                outletId,
               );
             },
           ),
@@ -128,6 +132,7 @@ void showModal(
   String img,
   String productCat,
   double stockCount,
+  String outId,
 ) {
   final cartData = Provider.of<CartData>(ctx, listen: false);
 
@@ -222,6 +227,7 @@ void showModal(
                         ),
                       ),
                       onPressed: () {
+                        Navigator.of(context).pop();
                         cartData.addToCart(
                           ctx: ctx,
                           productId: proId,
@@ -231,11 +237,8 @@ void showModal(
                           countInStock: stockCount,
                           qty: CartCounter.qty,
                           img: img,
+                          outletId: outId,
                         );
-                        cartData.snackBar(ctx, () {
-                          cartData.removeAddedItem(proId, CartCounter.qty);
-                        });
-                        Navigator.of(context).pop();
                       },
                       icon: Icon(Icons.add_shopping_cart_rounded),
                       label: Text("Add Item"),

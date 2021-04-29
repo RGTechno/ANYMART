@@ -66,6 +66,7 @@ class Outlet extends StatelessWidget {
                             count: double.parse(
                               sdp[index][countInStock].toString(),
                             ),
+                            outletId: outletId,
                           );
                         },
                         itemCount: sdp.length,

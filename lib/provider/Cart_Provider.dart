@@ -23,6 +23,11 @@ class CartItem {
 
 class CartData with ChangeNotifier {
   Map<String, CartItem> _cartItems = {};
+  String _cartOutletState;
+
+  String get cartOutletId {
+    return _cartOutletState;
+  }
 
   Map<String, CartItem> get cartItems {
     return {..._cartItems};
@@ -51,6 +56,24 @@ class CartData with ChangeNotifier {
     );
   }
 
+  Future alertDifferentOutlet(BuildContext ctx) {
+    return showDialog(
+      context: ctx,
+      builder: (ctx) => AlertDialog(
+        title: Text("Cannot Add To Cart!!"),
+        content: Text("Order must be placed from a single outlet at a time!!"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(false);
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
   void addToCart({
     BuildContext ctx,
     String id,
@@ -61,7 +84,9 @@ class CartData with ChangeNotifier {
     int qty,
     String cat,
     String img,
+    String outletId,
   }) {
+    // print(outletId);
     try {
       if (_cartItems.containsKey(productId)) {
         _cartItems.update(
@@ -75,18 +100,30 @@ class CartData with ChangeNotifier {
             proImage: existingItem.proImage,
           ),
         );
+        snackBar(ctx, () {
+          removeAddedItem(productId, qty);
+        });
       } else {
-        _cartItems.putIfAbsent(
-          productId,
-          () => CartItem(
-            id: Uuid().v4(),
-            productName: productName,
-            quantity: qty,
-            price: price,
-            count: countInStock,
-            proImage: img,
-          ),
-        );
+        if (_cartItems.length == 0 || outletId == _cartOutletState) {
+          _cartItems.putIfAbsent(
+            productId,
+            () => CartItem(
+              id: Uuid().v4(),
+              productName: productName,
+              quantity: qty,
+              price: price,
+              count: countInStock,
+              proImage: img,
+            ),
+          );
+          snackBar(ctx, () {
+            removeAddedItem(productId, qty);
+          });
+          _cartOutletState = outletId;
+        } else {
+          alertDifferentOutlet(ctx);
+        }
+        // print(_cartOutletState);
       }
 
       // print(_cartItems.values.toList().map((e) => print(e.productId)));
