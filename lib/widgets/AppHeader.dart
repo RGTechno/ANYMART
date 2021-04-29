@@ -20,7 +20,7 @@ AppBar appHeader(BuildContext ctx) {
         child: IconButton(
           icon: Icon(Icons.shopping_cart_outlined),
           onPressed: () {
-            Navigator.of(ctx).pushNamed(cartScreen);
+            Navigator.of(ctx).pushReplacementNamed(cartScreen);
           },
         ),
       ),
