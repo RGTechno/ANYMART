@@ -17,7 +17,7 @@ class MerchScreen extends StatelessWidget {
 
     return Scaffold(
       drawer: DrawerMenu(),
-      appBar: appHeader(context),
+      appBar: AppBar(),
       body: FutureBuilder(
         future: merchantData.getProductsWithId(user.uid),
         builder: (ctx, snapshot) {

@@ -2,6 +2,7 @@ import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:anybuy/provider/Cart_Provider.dart';
 import 'package:anybuy/provider/MerchantData_Provider.dart';
+import 'package:anybuy/provider/Order_Provider.dart';
 import 'package:anybuy/provider/Outlet_Provider.dart';
 import 'package:anybuy/screens/AddProduct_Screen.dart';
 import 'package:anybuy/screens/Cart_Screen.dart';
@@ -47,6 +48,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => CartData(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => OrdersData(),
         ),
       ],
       child: MaterialApp(

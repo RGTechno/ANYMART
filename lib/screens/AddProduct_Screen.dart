@@ -91,7 +91,7 @@ class _AddProductState extends State<AddProduct> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: appHeader(context),
+        appBar: AppBar(),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

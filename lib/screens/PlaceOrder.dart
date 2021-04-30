@@ -1,12 +1,20 @@
+import 'package:anybuy/provider/AuthData_Provider.dart';
+import 'package:anybuy/provider/Cart_Provider.dart';
+import 'package:anybuy/provider/Order_Provider.dart';
 import 'package:anybuy/widgets/AppHeader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 
 class PlaceOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final authData = Provider.of<AuthData>(context);
+    final orderData = Provider.of<OrdersData>(context);
+    final cartData = Provider.of<CartData>(context);
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -86,8 +94,15 @@ class PlaceOrderScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {},
+              InkWell(
+                onTap: () {
+                  orderData.placeOrder(
+                    cartData.cartItems.values.toList(),
+                    cartData.totalAmountWithDelivery,
+                    cartData.cartOutletId,
+                  );
+                  // print(authData.currentUserData["orders"]);
+                },
                 child: Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 8, vertical: 15),

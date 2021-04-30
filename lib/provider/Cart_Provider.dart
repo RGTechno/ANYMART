@@ -41,6 +41,14 @@ class CartData with ChangeNotifier {
     return total;
   }
 
+  double get totalAmountWithDelivery {
+    double total = 0;
+    _cartItems.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+    return total+15;
+  }
+
   void snackBar(BuildContext ctx, Function actionPress) {
     ScaffoldMessenger.of(ctx).showSnackBar(
       SnackBar(
