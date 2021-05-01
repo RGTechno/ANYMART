@@ -22,6 +22,12 @@ class OrdersData with ChangeNotifier {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  List<OrderItem> _orders = [];
+
+  List<OrderItem> get orders {
+    return [..._orders];
+  }
+
   Future<void> addOrder(
       String collection, String id, Map<String, dynamic> order) async {
     try {
@@ -71,5 +77,51 @@ class OrdersData with ChangeNotifier {
     } catch (err) {
       print(err);
     }
+    notifyListeners();
+  }
+
+  Future<void> getOrders(String collection, String id) async {
+    var orderResponse;
+    List<OrderItem> loadedOrders = [];
+    try {
+      orderResponse = await firestore
+          .collection(collection)
+          .doc(id)
+          .collection("orders")
+          .get();
+
+      orderResponse.docs.forEach((doc) {
+        loadedOrders.insert(
+          0,
+          OrderItem(
+            id: doc.id,
+            totalAmount: doc["totalAmount"],
+            date: DateTime.parse(doc["orderDateTime"]),
+            order: (doc["order"] as List<dynamic>)
+                .map(
+                  (ci) => CartItem(
+                    id: ci["id"],
+                    quantity: ci["quantity"],
+                    price: ci["price"],
+                    productName: ci[productName],
+                    proImage: ci[productImg],
+                  ),
+                )
+                .toList(),
+          ),
+        );
+      });
+
+      // print(_orders.map((oi) => oi.order.map((ci) => print("${ci.productName}"))));
+      // print(_orders.map((oi) => print(oi)));
+
+      _orders = loadedOrders;
+      print(_orders);
+
+      // print(orderResponse);
+    } catch (err) {
+      print(err);
+    }
+    notifyListeners();
   }
 }

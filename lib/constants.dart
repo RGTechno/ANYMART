@@ -9,6 +9,7 @@ const outletScreen = "/outletScreen";
 const cartScreen = "/cartScreen";
 const pageView = "/pageViewScreen";
 const placeOrderScreen = "/placeOrderScreen";
+const ordersScreen = "/ordersScreen";
 
 const userCollection = "users";
 const merchantCollection = "merchant";

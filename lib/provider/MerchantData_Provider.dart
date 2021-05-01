@@ -12,7 +12,11 @@ class MerchantData with ChangeNotifier {
       firebase_storage.FirebaseStorage.instance;
 
   Map<String, dynamic> currentUserProduct = {};
-  String currentUserOutletId;
+  String _currentUserOutletId;
+
+  String get currentOutletId {
+    return _currentUserOutletId;
+  }
 
   Future<void> addProduct({
     BuildContext ctx,
@@ -21,12 +25,12 @@ class MerchantData with ChangeNotifier {
     double price,
     File image,
   }) async {
-    print(currentUserOutletId);
+    // print(currentUserOutletId);
     try {
       final ref = storage
           .ref()
           .child("product_images")
-          .child(currentUserOutletId)
+          .child(_currentUserOutletId)
           .child(
             Uuid().v4(),
           );
@@ -37,7 +41,7 @@ class MerchantData with ChangeNotifier {
 
       await firestore
           .collection(outletsCollection)
-          .doc(currentUserOutletId)
+          .doc(_currentUserOutletId)
           .update({
         products: FieldValue.arrayUnion([
           {
@@ -79,7 +83,7 @@ class MerchantData with ChangeNotifier {
           )
           .get();
       userProducts.docs.forEach((doc) {
-        currentUserOutletId = doc.id;
+        _currentUserOutletId = doc.id;
         currentUserProduct.addAll({
           merchantName: doc[merchantName],
           category: doc[category],
@@ -88,7 +92,7 @@ class MerchantData with ChangeNotifier {
           products: doc[products],
         });
       });
-      print(currentUserOutletId);
+      // print(currentUserOutletId);
     } catch (err) {
       print(err);
     }

@@ -117,6 +117,19 @@ class DrawerMenu extends StatelessWidget {
                   },
                 )
               : Container(),
+          ListTile(
+            leading: Icon(Icons.pending_actions_rounded),
+            title: Text(
+              "Orders",
+              style: TextStyle(fontSize: 16),
+            ),
+            onTap: () {
+              if(currentUserData.isEmpty){
+                Navigator.of(context).pushReplacementNamed(authHome);
+              }
+              else Navigator.of(context).pushNamed(ordersScreen);
+            },
+          )
         ],
       ),
     );

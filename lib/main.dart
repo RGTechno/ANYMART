@@ -8,6 +8,7 @@ import 'package:anybuy/screens/AddProduct_Screen.dart';
 import 'package:anybuy/screens/Cart_Screen.dart';
 import 'package:anybuy/screens/Category_Screen.dart';
 import 'package:anybuy/screens/Home_Screen.dart';
+import 'package:anybuy/screens/Orders_Screen.dart';
 import 'package:anybuy/screens/Outlet_Screen.dart';
 import 'package:anybuy/screens/PageviewMainScreen.dart';
 import 'package:anybuy/screens/PlaceOrder.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: homeScreen,
         routes: {
+          ordersScreen: (_) => OrdersScreen(),
           cartScreen: (_) => Cart(),
           pageView: (_) => PageViewMainScreen(),
           homeScreen: (_) => HomeScreen(),
