@@ -32,12 +32,16 @@ class OrdersScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-            return ListView.builder(
-              itemBuilder: (_, index) {
-                return Order(orderData.orders[index]);
-              },
-              itemCount: orderData.orders.length,
-            );
+            return orderData.orders.length == 0
+                ? Center(
+                    child: Text("No Orders Yet!!"),
+                  )
+                : ListView.builder(
+                    itemBuilder: (_, index) {
+                      return Order(orderData.orders[index]);
+                    },
+                    itemCount: orderData.orders.length,
+                  );
           }),
     );
   }

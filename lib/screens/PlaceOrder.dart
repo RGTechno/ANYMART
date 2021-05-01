@@ -4,11 +4,67 @@ import 'package:anybuy/provider/Order_Provider.dart';
 import 'package:anybuy/widgets/AppHeader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
 
-class PlaceOrderScreen extends StatelessWidget {
+class PlaceOrderScreen extends StatefulWidget {
+  @override
+  _PlaceOrderScreenState createState() => _PlaceOrderScreenState();
+}
+
+class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
+  double currentLatitude;
+  double currentLongitude;
+  String address;
+
+  Future<void> getAddress() async {
+    final coordinates = new Coordinates(currentLatitude, currentLongitude);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+
+    setState(() {
+      address = addresses.first.addressLine;
+    });
+  }
+
+  Future<void> _determineAndSetPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    final location = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    setState(() {
+      currentLatitude = location.latitude;
+      currentLongitude = location.longitude;
+    });
+
+    await getAddress();
+
+    print(address);
+  }
+
   @override
   Widget build(BuildContext context) {
     final authData = Provider.of<AuthData>(context);
@@ -40,7 +96,9 @@ class PlaceOrderScreen extends StatelessWidget {
                   ),
                 ),
                 child: TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    _determineAndSetPosition();
+                  },
                   icon: Icon(
                     Icons.my_location,
                     color: Colors.white,
@@ -55,6 +113,12 @@ class PlaceOrderScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              address != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(address),
+                    )
+                  : Container(),
               Container(
                 padding: const EdgeInsets.all(5),
                 margin: const EdgeInsets.symmetric(
@@ -95,12 +159,14 @@ class PlaceOrderScreen extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: () {
-                  orderData.placeOrder(
-                    cartData.cartItems.values.toList(),
-                    cartData.totalAmountWithDelivery,
-                    cartData.cartOutletId,
+                onTap: () async {
+                  await orderData.placeOrder(
+                    cartProducts: cartData.cartItems.values.toList(),
+                    orderAmount: cartData.totalAmountWithDelivery,
+                    outletID: cartData.cartOutletId,
+                    location: address,
                   );
+                  cartData.clearCart();
                   // print(authData.currentUserData["orders"]);
                 },
                 child: Container(

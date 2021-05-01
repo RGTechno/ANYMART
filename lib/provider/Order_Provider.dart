@@ -9,12 +9,14 @@ class OrderItem {
   final double totalAmount;
   final List<CartItem> order;
   final DateTime date;
+  final String location;
 
   OrderItem({
     @required this.id,
     @required this.totalAmount,
     @required this.date,
     @required this.order,
+    @required this.location,
   });
 }
 
@@ -41,11 +43,12 @@ class OrdersData with ChangeNotifier {
     }
   }
 
-  Future<void> placeOrder(
+  Future<void> placeOrder({
     List<CartItem> cartProducts,
     double orderAmount,
     String outletID,
-  ) async {
+    String location,
+  }) async {
     final timeStamp = DateTime.now();
     try {
       await addOrder(userCollection, _auth.currentUser.uid, {
@@ -60,6 +63,7 @@ class OrdersData with ChangeNotifier {
                   productImg: ci.proImage,
                 })
             .toList(),
+        "deliveryLocation": location,
       });
       await addOrder(outletsCollection, outletID, {
         "totalAmount": orderAmount,
@@ -73,6 +77,7 @@ class OrdersData with ChangeNotifier {
                   productImg: ci.proImage,
                 })
             .toList(),
+        "deliveryLocation": location,
       });
     } catch (err) {
       print(err);
@@ -108,6 +113,7 @@ class OrdersData with ChangeNotifier {
                   ),
                 )
                 .toList(),
+            location: doc["deliveryLocation"],
           ),
         );
       });

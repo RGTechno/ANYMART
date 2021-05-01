@@ -46,7 +46,12 @@ class CartData with ChangeNotifier {
     _cartItems.forEach((key, cartItem) {
       total += cartItem.price * cartItem.quantity;
     });
-    return total+15;
+    return total + 15;
+  }
+
+  void clearCart() {
+    _cartItems.clear();
+    notifyListeners();
   }
 
   void snackBar(BuildContext ctx, Function actionPress) {

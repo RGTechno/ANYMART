@@ -42,15 +42,43 @@ class Order extends StatelessWidget {
                 Text(
                   "Qty: ${ci.quantity.toString()}X",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
-                      fontSize: 15),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
+                    fontSize: 15,
+                  ),
                 ),
               ],
             ),
           ),
           Divider(thickness: 2),
+          Container(
+            margin: const EdgeInsets.only(top: 10, bottom: 0),
+            // color: Colors.black12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "Deliver To:",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    "${orders.location}",
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                    softWrap: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(),
           currentUserData["isMerchant"] == true
               ? Container()
               : Container(
