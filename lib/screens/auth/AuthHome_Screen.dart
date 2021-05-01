@@ -92,7 +92,7 @@ class _AuthHomeState extends State<AuthHome> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: appHeader(context),
+        appBar: AppBar(),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

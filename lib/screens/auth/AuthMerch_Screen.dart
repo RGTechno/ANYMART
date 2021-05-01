@@ -119,7 +119,7 @@ class _AuthMerchantState extends State<AuthMerchant> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: appHeader(context),
+        appBar: AppBar(),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
