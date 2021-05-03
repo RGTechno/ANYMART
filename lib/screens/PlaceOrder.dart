@@ -1,3 +1,4 @@
+import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:anybuy/provider/Cart_Provider.dart';
 import 'package:anybuy/provider/Order_Provider.dart';
 import 'package:anybuy/widgets/AppHeader.dart';
@@ -16,6 +17,7 @@ class PlaceOrderScreen extends StatefulWidget {
 
 class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   bool _isLoading = false;
+  String selectedAddress;
 
   double currentLatitude;
   double currentLongitude;
@@ -63,13 +65,16 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
 
     await getAddress();
 
-    print(address);
+    // print(address);
   }
 
   @override
   Widget build(BuildContext context) {
+    final authData = Provider.of<AuthData>(context);
     final orderData = Provider.of<OrdersData>(context);
     final cartData = Provider.of<CartData>(context);
+
+    print(selectedAddress);
 
     return _isLoading
         ? Scaffold(
@@ -90,6 +95,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     Container(
                       alignment: Alignment.centerLeft,
                       width: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
                       height: 50,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -100,6 +106,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                             color4,
                           ],
                         ),
+                        borderRadius: BorderRadius.circular(13),
                       ),
                       child: TextButton.icon(
                         onPressed: () {
@@ -119,30 +126,6 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                         ),
                       ),
                     ),
-                    address != null
-                        ? Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    "Deliver To:",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1.5,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(address),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(),
                     // Container(
                     //   padding: const EdgeInsets.all(5),
                     //   margin: const EdgeInsets.symmetric(
@@ -179,6 +162,91 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     //     ],
                     //   ),
                     // ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black26, width: 1),
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 10,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Deliver To:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.5,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Divider(thickness: 1.5),
+                          address != null
+                              ? RadioListTile(
+                                  toggleable: true,
+                                  groupValue: selectedAddress,
+                                  value: address,
+                                  title: Text(address),
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      selectedAddress = value;
+                                    });
+                                  },
+                                )
+                              : Container(),
+                          authData.currentUserData["location"] != ""
+                              ? Container(
+                                  child: RadioListTile(
+                                    toggleable: true,
+                                    groupValue: selectedAddress,
+                                    value:
+                                        "${authData.currentUserData["location"]}",
+                                    onChanged: (String value) {
+                                      setState(() {
+                                        selectedAddress = value;
+                                      });
+                                    },
+                                    title: Text(
+                                      authData.currentUserData["location"],
+                                    ),
+                                  ),
+                                )
+                              : Column(
+                                  children: [
+                                    Container(
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          hintText: "Enter Delivery Location",
+                                          labelText: "Delivery Location",
+                                        ),
+                                        maxLines: null,
+                                        keyboardType: TextInputType.multiline,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pushNamed(profileScreen);
+                                        },
+                                        child: Text(
+                                          "OR Set Your Default Location in Profile",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ],
+                      ),
+                    ),
                     InkWell(
                       onTap: () async {
                         setState(() {
