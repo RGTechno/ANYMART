@@ -11,6 +11,7 @@ const pageView = "/pageViewScreen";
 const placeOrderScreen = "/placeOrderScreen";
 const ordersScreen = "/ordersScreen";
 const afterOrderScreen = "/afterOrderScreen";
+const profileScreen = "/profileScreen";
 
 const userCollection = "users";
 const merchantCollection = "merchant";

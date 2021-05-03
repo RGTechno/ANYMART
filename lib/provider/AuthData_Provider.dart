@@ -111,6 +111,28 @@ class AuthData with ChangeNotifier {
     }
   }
 
+  Future<void> updateAccountDetails({
+    @required String firstname,
+    @required String lastname,
+    String phoneNo,
+    String location,
+  }) async {
+    try {
+      await firestore
+          .collection(allUserCollection)
+          .doc(_auth.currentUser.uid)
+          .update({
+        "firstname": firstname,
+        "lastname": lastname,
+        "phoneNumber": phoneNo,
+        "location": location,
+      });
+    } catch (err) {
+      print(err);
+    }
+    notifyListeners();
+  }
+
   void createMerchant({
     @required String email,
     @required String pass,

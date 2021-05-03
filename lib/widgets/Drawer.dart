@@ -118,6 +118,19 @@ class DrawerMenu extends StatelessWidget {
                 )
               : Container(),
           ListTile(
+            leading: Icon(Icons.account_circle_outlined),
+            title: Text(
+              "Profile",
+              style: TextStyle(fontSize: 16),
+            ),
+            onTap: () {
+              if(currentUserData.isEmpty){
+                Navigator.of(context).pushReplacementNamed(authHome);
+              }
+              else Navigator.of(context).pushNamed(profileScreen);
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.pending_actions_rounded),
             title: Text(
               "Orders",
@@ -129,7 +142,7 @@ class DrawerMenu extends StatelessWidget {
               }
               else Navigator.of(context).pushNamed(ordersScreen);
             },
-          )
+          ),
         ],
       ),
     );
