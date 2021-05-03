@@ -253,17 +253,22 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                           _isLoading = true;
                         });
                         await orderData.placeOrder(
-                          cartProducts: cartData.cartItems.values.toList(),
-                          orderAmount: cartData.totalAmountWithDelivery,
-                          outletID: cartData.cartOutletId,
-                          location: address,
-                        );
-                        cartData.clearCart();
+                            ctx: context,
+                            cartProducts: cartData.cartItems.values.toList(),
+                            orderAmount: cartData.totalAmountWithDelivery,
+                            outletID: cartData.cartOutletId,
+                            location: selectedAddress,
+                            phone: authData.currentUserData["phoneNumber"],
+                            orderHandler: () {
+                              cartData.clearCart();
+
+                              Navigator.of(context)
+                                  .pushReplacementNamed(afterOrderScreen);
+                            });
                         setState(() {
                           _isLoading = false;
                         });
-                        Navigator.of(context)
-                            .pushReplacementNamed(afterOrderScreen);
+
                         // print(authData.currentUserData["orders"]);
                       },
                       child: Container(

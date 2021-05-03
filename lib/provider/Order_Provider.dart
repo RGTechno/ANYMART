@@ -10,6 +10,7 @@ class OrderItem {
   final List<CartItem> order;
   final DateTime date;
   final String location;
+  final String phone;
 
   OrderItem({
     @required this.id,
@@ -17,6 +18,7 @@ class OrderItem {
     @required this.date,
     @required this.order,
     @required this.location,
+    @required this.phone,
   });
 }
 
@@ -44,41 +46,72 @@ class OrdersData with ChangeNotifier {
   }
 
   Future<void> placeOrder({
-    List<CartItem> cartProducts,
-    double orderAmount,
-    String outletID,
-    String location,
+    @required BuildContext ctx,
+    @required List<CartItem> cartProducts,
+    @required double orderAmount,
+    @required String outletID,
+    @required String location,
+    @required String phone,
+    Function orderHandler,
   }) async {
     final timeStamp = DateTime.now();
     try {
-      await addOrder(userCollection, _auth.currentUser.uid, {
-        "totalAmount": orderAmount,
-        "orderDateTime": timeStamp.toIso8601String(),
-        "order": cartProducts
-            .map((ci) => {
-                  "id": ci.id,
-                  productName: ci.productName,
-                  productPrice: ci.price,
-                  "quantity": ci.quantity,
-                  productImg: ci.proImage,
-                })
-            .toList(),
-        "deliveryLocation": location,
-      });
-      await addOrder(outletsCollection, outletID, {
-        "totalAmount": orderAmount,
-        "orderDateTime": timeStamp.toIso8601String(),
-        "order": cartProducts
-            .map((ci) => {
-                  "id": ci.id,
-                  productName: ci.productName,
-                  productPrice: ci.price,
-                  "quantity": ci.quantity,
-                  productImg: ci.proImage,
-                })
-            .toList(),
-        "deliveryLocation": location,
-      });
+      if (location != null && phone != null) {
+        await addOrder(userCollection, _auth.currentUser.uid, {
+          "totalAmount": orderAmount,
+          "orderDateTime": timeStamp.toIso8601String(),
+          "order": cartProducts
+              .map((ci) => {
+                    "id": ci.id,
+                    productName: ci.productName,
+                    productPrice: ci.price,
+                    "quantity": ci.quantity,
+                    productImg: ci.proImage,
+                  })
+              .toList(),
+          "deliveryLocation": location,
+          "phoneNumber": phone,
+        });
+        await addOrder(outletsCollection, outletID, {
+          "totalAmount": orderAmount,
+          "orderDateTime": timeStamp.toIso8601String(),
+          "order": cartProducts
+              .map((ci) => {
+                    "id": ci.id,
+                    productName: ci.productName,
+                    productPrice: ci.price,
+                    "quantity": ci.quantity,
+                    productImg: ci.proImage,
+                  })
+              .toList(),
+          "deliveryLocation": location,
+          "phoneNumber": phone,
+        });
+        orderHandler();
+      } else {
+        return showDialog(
+          context: ctx,
+          builder: (ctx) => AlertDialog(
+            title: Text("Cannot Place Order!!"),
+            content:
+                Text("Delivery Location and Phone Number must be provided."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pushNamed(profileScreen);
+                },
+                child: Text("Go to profile"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop(false);
+                },
+                child: Text("OK"),
+              ),
+            ],
+          ),
+        );
+      }
     } catch (err) {
       print(err);
     }
@@ -114,6 +147,7 @@ class OrdersData with ChangeNotifier {
                 )
                 .toList(),
             location: doc["deliveryLocation"],
+            phone: doc["phoneNumber"],
           ),
         );
       });

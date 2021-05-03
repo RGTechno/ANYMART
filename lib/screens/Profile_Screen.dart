@@ -68,6 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _isLoading = false;
       });
+      Navigator.of(context).pop();
     }
 
     return _isLoading
