@@ -59,7 +59,7 @@ class Order extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Text(
                     "Deliver To:",
                     style: TextStyle(fontSize: 15),
@@ -67,12 +67,18 @@ class Order extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 3,
-                  child: Text(
-                    "${orders.location}",
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                    softWrap: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("${orders.placedBy}"),
+                      Text(
+                        "${orders.location}",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                        softWrap: true,
+                      ),
+                    ],
                   ),
                 ),
               ],

@@ -11,6 +11,7 @@ class OrderItem {
   final DateTime date;
   final String location;
   final String phone;
+  final String placedBy;
 
   OrderItem({
     @required this.id,
@@ -19,6 +20,7 @@ class OrderItem {
     @required this.order,
     @required this.location,
     @required this.phone,
+    @required this.placedBy,
   });
 }
 
@@ -52,6 +54,7 @@ class OrdersData with ChangeNotifier {
     @required String outletID,
     @required String location,
     @required String phone,
+    @required String placedBy,
     Function orderHandler,
   }) async {
     final timeStamp = DateTime.now();
@@ -71,6 +74,7 @@ class OrdersData with ChangeNotifier {
               .toList(),
           "deliveryLocation": location,
           "phoneNumber": phone,
+          "placedBy": placedBy,
         });
         await addOrder(outletsCollection, outletID, {
           "totalAmount": orderAmount,
@@ -86,6 +90,7 @@ class OrdersData with ChangeNotifier {
               .toList(),
           "deliveryLocation": location,
           "phoneNumber": phone,
+          "placedBy": placedBy,
         });
         orderHandler();
       } else {
@@ -148,6 +153,7 @@ class OrdersData with ChangeNotifier {
                 .toList(),
             location: doc["deliveryLocation"],
             phone: doc["phoneNumber"],
+            placedBy: doc["placedBy"],
           ),
         );
       });

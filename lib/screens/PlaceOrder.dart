@@ -259,6 +259,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                             outletID: cartData.cartOutletId,
                             location: selectedAddress,
                             phone: authData.currentUserData["phoneNumber"],
+                            placedBy:
+                                "${authData.currentUserData["firstname"]} ${authData.currentUserData["lastname"]}",
                             orderHandler: () {
                               cartData.clearCart();
 

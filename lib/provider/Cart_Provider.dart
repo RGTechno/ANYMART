@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -22,6 +24,7 @@ class CartItem {
 }
 
 class CartData with ChangeNotifier {
+
   Map<String, CartItem> _cartItems = {};
   String _cartOutletState;
 
@@ -87,7 +90,8 @@ class CartData with ChangeNotifier {
     );
   }
 
-  void addToCart({
+
+  Future addToCart({
     BuildContext ctx,
     String id,
     String productId,
@@ -98,7 +102,7 @@ class CartData with ChangeNotifier {
     String cat,
     String img,
     String outletId,
-  }) {
+  }) async {
     // print(outletId);
     try {
       if (_cartItems.containsKey(productId)) {
@@ -138,6 +142,7 @@ class CartData with ChangeNotifier {
         }
         // print(_cartOutletState);
       }
+
 
       // print(_cartItems.values.toList().map((e) => print(e.productId)));
     } catch (err) {
