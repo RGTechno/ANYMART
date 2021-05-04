@@ -14,35 +14,51 @@ class OrdersScreen extends StatelessWidget {
         Provider.of<MerchantData>(context, listen: false).currentOutletId;
 
     final authData = Provider.of<AuthData>(context);
+
+    Future<void> refresh() async {
+      authData.currentUserData["isMerchant"] != true
+          ? orderData.getOrders(
+              userCollection,
+              authData.currentUserData["id"],
+            )
+          : orderData.getOrders(
+              outletsCollection,
+              outletID,
+            );
+    }
+
     return Scaffold(
       appBar: AppBar(),
-      body: FutureBuilder(
-          future: authData.currentUserData["isMerchant"] != true
-              ? orderData.getOrders(
-                  userCollection,
-                  authData.currentUserData["id"],
-                )
-              : orderData.getOrders(
-                  outletsCollection,
-                  outletID,
-                ),
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return orderData.orders.length == 0
-                ? Center(
-                    child: Text("No Orders Yet!!"),
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: FutureBuilder(
+            future: authData.currentUserData["isMerchant"] != true
+                ? orderData.getOrders(
+                    userCollection,
+                    authData.currentUserData["id"],
                   )
-                : ListView.builder(
-                    itemBuilder: (_, index) {
-                      return Order(orderData.orders[index]);
-                    },
-                    itemCount: orderData.orders.length,
-                  );
-          }),
+                : orderData.getOrders(
+                    outletsCollection,
+                    outletID,
+                  ),
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return orderData.orders.length == 0
+                  ? Center(
+                      child: Text("No Orders Yet!!"),
+                    )
+                  : ListView.builder(
+                      itemBuilder: (_, index) {
+                        return Order(orderData.orders[index]);
+                      },
+                      itemCount: orderData.orders.length,
+                    );
+            }),
+      ),
     );
   }
 }
