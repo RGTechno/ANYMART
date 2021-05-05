@@ -7,28 +7,47 @@ import '../provider/Order_Provider.dart' as or;
 
 class Order extends StatelessWidget {
   final or.OrderItem orders;
+  final String outletId;
 
-  Order(this.orders);
+  Order({
+    @required this.orders,
+    @required this.outletId,
+  });
 
   @override
   Widget build(BuildContext context) {
     final currentUserData = Provider.of<AuthData>(context).currentUserData;
+    final orderData = Provider.of<or.OrdersData>(context);
     return InkWell(
       onTap: currentUserData["isMerchant"] == true
           ? () {
               orderModalSheet(
-                ctx: context,
-                orders: orders,
-                user: currentUserData,
-              );
+                  ctx: context,
+                  orders: orders,
+                  user: currentUserData,
+                  statusChange: () async {
+                    await orderData.updateOrderStatus(
+                      orderId: orders.id,
+                      outId: outletId,
+                      userId: orders.userId,
+                    );
+                    Navigator.of(context).pop(true);
+                  });
             }
           : null,
-      child: OrderDetail(orders: orders, currentUserData: currentUserData),
+      child: orders.orderStatus == "Pending"
+          ? OrderDetail(
+              orders: orders,
+              currentUserData: currentUserData,
+              pendingOrders: true,
+            )
+          : Container()
     );
   }
 }
 
-void orderModalSheet({BuildContext ctx, or.OrderItem orders, Map user}) {
+void orderModalSheet(
+    {BuildContext ctx, or.OrderItem orders, Map user, Function statusChange}) {
   showModalBottomSheet(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
@@ -75,7 +94,7 @@ void orderModalSheet({BuildContext ctx, or.OrderItem orders, Map user}) {
                       ),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: statusChange,
                   child: Text("Delivered"),
                 ),
               ],

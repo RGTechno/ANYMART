@@ -16,15 +16,17 @@ class OrdersScreen extends StatelessWidget {
     final authData = Provider.of<AuthData>(context);
 
     Future<void> refresh() async {
-      authData.currentUserData["isMerchant"] != true
-          ? orderData.getOrders(
-              userCollection,
-              authData.currentUserData["id"],
-            )
-          : orderData.getOrders(
-              outletsCollection,
-              outletID,
-            );
+      if (authData.currentUserData["isMerchant"] != true) {
+        await orderData.getOrders(
+          userCollection,
+          authData.currentUserData["id"],
+        );
+      } else {
+        await orderData.getOrders(
+          outletsCollection,
+          outletID,
+        );
+      }
     }
 
     return Scaffold(
@@ -53,7 +55,10 @@ class OrdersScreen extends StatelessWidget {
                     )
                   : ListView.builder(
                       itemBuilder: (_, index) {
-                        return Order(orderData.orders[index]);
+                        return Order(
+                          orders: orderData.orders[index],
+                          outletId: outletID,
+                        );
                       },
                       itemCount: orderData.orders.length,
                     );

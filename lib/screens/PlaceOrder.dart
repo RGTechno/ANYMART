@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 
@@ -74,7 +75,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
     final orderData = Provider.of<OrdersData>(context);
     final cartData = Provider.of<CartData>(context);
 
-    print(selectedAddress);
+    // print(selectedAddress);
 
     return _isLoading
         ? Scaffold(
@@ -253,6 +254,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                           _isLoading = true;
                         });
                         await orderData.placeOrder(
+                            documentId: Uuid().v4(),
                             ctx: context,
                             cartProducts: cartData.cartItems.values.toList(),
                             orderAmount: cartData.totalAmountWithDelivery,

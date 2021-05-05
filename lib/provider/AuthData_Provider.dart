@@ -84,6 +84,8 @@ class AuthData with ChangeNotifier {
   }
 
   Future<void> deleteOutlet() async {
+    WriteBatch batch = firestore.batch();
+
     try {
       var outlet = await firestore
           .collection(outletsCollection)
@@ -92,6 +94,10 @@ class AuthData with ChangeNotifier {
 
       outlet.docs.forEach((doc) async {
         await doc.reference.delete();
+        var outletOrders = await doc.reference.collection("orders").get();
+        outletOrders.docs.forEach((order) {
+          batch.delete(order.reference);
+        });
       });
     } catch (err) {
       print(err);

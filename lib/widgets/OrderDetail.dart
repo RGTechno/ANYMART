@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../provider/Order_Provider.dart' as or;
@@ -5,10 +6,12 @@ import '../provider/Order_Provider.dart' as or;
 class OrderDetail extends StatelessWidget {
   final or.OrderItem orders;
   final Map currentUserData;
+  final bool pendingOrders;
 
   const OrderDetail({
     @required this.orders,
     @required this.currentUserData,
+    this.pendingOrders,
   });
 
   @override
@@ -74,6 +77,7 @@ class OrderDetail extends StatelessWidget {
                       Text("${orders.placedBy}"),
                       Text(
                         "${orders.location}",
+                        textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: 15,
                         ),
@@ -85,7 +89,7 @@ class OrderDetail extends StatelessWidget {
               ],
             ),
           ),
-          Divider(),
+          Divider(thickness: 1),
           currentUserData["isMerchant"] == true
               ? Container()
               : Container(
@@ -121,7 +125,7 @@ class OrderDetail extends StatelessWidget {
                         style: TextStyle(fontSize: 20),
                       ),
                       Text(
-                        "Pending",
+                        "${orders.orderStatus}",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

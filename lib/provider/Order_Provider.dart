@@ -12,6 +12,8 @@ class OrderItem {
   final String location;
   final String phone;
   final String placedBy;
+  final String orderStatus;
+  final String userId;
 
   OrderItem({
     @required this.id,
@@ -21,6 +23,8 @@ class OrderItem {
     @required this.location,
     @required this.phone,
     @required this.placedBy,
+    @required this.orderStatus,
+    @required this.userId,
   });
 }
 
@@ -29,19 +33,35 @@ class OrdersData with ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   List<OrderItem> _orders = [];
+  // List<OrderItem> _pendingOrders = [];
+  // List<OrderItem> _deliveredOrders = [];
+
 
   List<OrderItem> get orders {
     return [..._orders];
   }
 
+  // List<OrderItem> get pendingOrders {
+  //   return [..._pendingOrders];
+  // }
+  //
+  // List<OrderItem> get deliveredOrders {
+  //   return [..._deliveredOrders];
+  // }
+
   Future<void> addOrder(
-      String collection, String id, Map<String, dynamic> order) async {
+    String collection,
+    String id,
+    Map<String, dynamic> order,
+    String docId,
+  ) async {
     try {
       await firestore
           .collection(collection)
           .doc(id)
           .collection("orders")
-          .add(order);
+          .doc(docId)
+          .set(order);
     } catch (err) {
       print(err);
     }
@@ -55,43 +75,58 @@ class OrdersData with ChangeNotifier {
     @required String location,
     @required String phone,
     @required String placedBy,
+    @required String documentId,
     Function orderHandler,
   }) async {
     final timeStamp = DateTime.now();
     try {
       if (location != null && phone != null) {
-        await addOrder(userCollection, _auth.currentUser.uid, {
-          "totalAmount": orderAmount,
-          "orderDateTime": timeStamp.toIso8601String(),
-          "order": cartProducts
-              .map((ci) => {
-                    "id": ci.id,
-                    productName: ci.productName,
-                    productPrice: ci.price,
-                    "quantity": ci.quantity,
-                    productImg: ci.proImage,
-                  })
-              .toList(),
-          "deliveryLocation": location,
-          "phoneNumber": phone,
-          "placedBy": placedBy,
-        });
-        await addOrder(outletsCollection, outletID, {
-          "totalAmount": orderAmount,
-          "orderDateTime": timeStamp.toIso8601String(),
-          "order": cartProducts
-              .map((ci) => {
-                    "id": ci.id,
-                    productName: ci.productName,
-                    productPrice: ci.price,
-                    "quantity": ci.quantity,
-                    productImg: ci.proImage,
-                  })
-              .toList(),
-          "deliveryLocation": location,
-          "phoneNumber": phone,
-          "placedBy": placedBy,
-        });
+        await addOrder(
+          userCollection,
+          _auth.currentUser.uid,
+          {
+            "userId": "${_auth.currentUser.uid}",
+            "totalAmount": orderAmount,
+            "orderDateTime": timeStamp.toIso8601String(),
+            "order": cartProducts
+                .map((ci) => {
+                      "id": ci.id,
+                      productName: ci.productName,
+                      productPrice: ci.price,
+                      "quantity": ci.quantity,
+                      productImg: ci.proImage,
+                    })
+                .toList(),
+            "deliveryLocation": location,
+            "phoneNumber": phone,
+            "placedBy": placedBy,
+            "status": "Pending",
+          },
+          documentId,
+        );
+        await addOrder(
+          outletsCollection,
+          outletID,
+          {
+            "userId": "${_auth.currentUser.uid}",
+            "totalAmount": orderAmount,
+            "orderDateTime": timeStamp.toIso8601String(),
+            "order": cartProducts
+                .map((ci) => {
+                      "id": ci.id,
+                      productName: ci.productName,
+                      productPrice: ci.price,
+                      "quantity": ci.quantity,
+                      productImg: ci.proImage,
+                    })
+                .toList(),
+            "deliveryLocation": location,
+            "phoneNumber": phone,
+            "placedBy": placedBy,
+            "status": "Pending",
+          },
+          documentId,
+        );
         orderHandler();
       } else {
         return showDialog(
@@ -137,6 +172,7 @@ class OrdersData with ChangeNotifier {
         loadedOrders.insert(
           0,
           OrderItem(
+            userId: doc["userId"],
             id: doc.id,
             totalAmount: doc["totalAmount"],
             date: DateTime.parse(doc["orderDateTime"]),
@@ -154,6 +190,7 @@ class OrdersData with ChangeNotifier {
             location: doc["deliveryLocation"],
             phone: doc["phoneNumber"],
             placedBy: doc["placedBy"],
+            orderStatus: doc["status"],
           ),
         );
       });
@@ -165,6 +202,31 @@ class OrdersData with ChangeNotifier {
       print(_orders);
 
       // print(orderResponse);
+    } catch (err) {
+      print(err);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateOrderStatus(
+      {String outId, String orderId, String userId}) async {
+    try {
+      await firestore
+          .collection(outletsCollection)
+          .doc(outId)
+          .collection("orders")
+          .doc(orderId)
+          .update({
+        "status": "Delivered",
+      });
+      await firestore
+          .collection(userCollection)
+          .doc(userId)
+          .collection("orders")
+          .doc(orderId)
+          .update({
+        "status": "Delivered",
+      });
     } catch (err) {
       print(err);
     }
