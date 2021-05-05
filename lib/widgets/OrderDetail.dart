@@ -112,29 +112,32 @@ class OrderDetail extends StatelessWidget {
                     ],
                   ),
                 ),
-          currentUserData["isMerchant"] != true
-              ? Container()
-              : Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 0),
-                  // color: Colors.black12,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Status:",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        "${orders.orderStatus}",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
+          Divider(),
+          Container(
+            margin: const EdgeInsets.only(top: 10, bottom: 0),
+            // color: Colors.black12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Status:",
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  "${orders.orderStatus}",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: orders.orderStatus == "Pending"
+                        ? Colors.red
+                        : orders.orderStatus == "Delivered"
+                            ? Colors.green
+                            : Colors.blueAccent,
                   ),
                 ),
+              ],
+            ),
+          ),
         ],
       ),
     );

@@ -33,9 +33,9 @@ class OrdersData with ChangeNotifier {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   List<OrderItem> _orders = [];
+
   // List<OrderItem> _pendingOrders = [];
   // List<OrderItem> _deliveredOrders = [];
-
 
   List<OrderItem> get orders {
     return [..._orders];
@@ -166,6 +166,7 @@ class OrdersData with ChangeNotifier {
           .collection(collection)
           .doc(id)
           .collection("orders")
+          .orderBy("orderDateTime", descending: false)
           .get();
 
       orderResponse.docs.forEach((doc) {

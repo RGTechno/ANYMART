@@ -6,7 +6,12 @@ import 'package:anybuy/widgets/Order.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
+  @override
+  _OrdersScreenState createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     final orderData = Provider.of<OrdersData>(context, listen: false);
@@ -16,17 +21,7 @@ class OrdersScreen extends StatelessWidget {
     final authData = Provider.of<AuthData>(context);
 
     Future<void> refresh() async {
-      if (authData.currentUserData["isMerchant"] != true) {
-        await orderData.getOrders(
-          userCollection,
-          authData.currentUserData["id"],
-        );
-      } else {
-        await orderData.getOrders(
-          outletsCollection,
-          outletID,
-        );
-      }
+      setState(() {});
     }
 
     return Scaffold(

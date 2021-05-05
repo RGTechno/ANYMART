@@ -35,13 +35,11 @@ class Order extends StatelessWidget {
                   });
             }
           : null,
-      child: orders.orderStatus == "Pending"
-          ? OrderDetail(
-              orders: orders,
-              currentUserData: currentUserData,
-              pendingOrders: true,
-            )
-          : Container()
+      child: OrderDetail(
+        orders: orders,
+        currentUserData: currentUserData,
+        pendingOrders: true,
+      ),
     );
   }
 }
@@ -94,7 +92,8 @@ void orderModalSheet(
                       ),
                     ),
                   ),
-                  onPressed: statusChange,
+                  onPressed:
+                      orders.orderStatus == "Delivered" ? null : statusChange,
                   child: Text("Delivered"),
                 ),
               ],
