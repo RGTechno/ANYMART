@@ -28,6 +28,99 @@ class AuthData with ChangeNotifier {
     return _isAuth;
   }
 
+  Future<void> deleteAuth() async {
+    try {
+      await _auth.currentUser.delete();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        print(
+            'The user must reauthenticate before this operation can be executed.');
+      }
+    }
+  }
+
+  Future<void> deleteMerchant() async {
+    try {
+      await firestore
+          .collection(allUserCollection)
+          .doc(_auth.currentUser.uid)
+          .delete();
+      await firestore
+          .collection(merchantCollection)
+          .doc(_auth.currentUser.uid)
+          .delete();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> deleteUser() async {
+    WriteBatch batch = firestore.batch();
+    try {
+      await firestore
+          .collection(allUserCollection)
+          .doc(_auth.currentUser.uid)
+          .delete();
+
+      var userOrders = await firestore
+          .collection(userCollection)
+          .doc(_auth.currentUser.uid)
+          .collection("orders")
+          .get();
+
+      userOrders.docs.forEach((doc) {
+        batch.delete(doc.reference);
+      });
+
+      await firestore
+          .collection(userCollection)
+          .doc(_auth.currentUser.uid)
+          .delete();
+
+      return batch.commit();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> deleteOutlet() async {
+    try {
+      var outlet = await firestore
+          .collection(outletsCollection)
+          .where("merchantId", isEqualTo: _auth.currentUser.uid)
+          .get();
+
+      outlet.docs.forEach((doc) async {
+        await doc.reference.delete();
+      });
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> deleteUserAccount() async {
+    try {
+      await deleteUser();
+      await deleteAuth();
+      _currentUserData.clear();
+    } catch (err) {
+      print(err);
+    }
+    notifyListeners();
+  }
+
+  Future<void> deleteMerchantAccount() async {
+    try {
+      await deleteOutlet();
+      await deleteMerchant();
+      await deleteAuth();
+      _currentUserData.clear();
+    } catch (err) {
+      print(err);
+    }
+    notifyListeners();
+  }
+
   Future<void> createOutlet(
     String id,
     String name,

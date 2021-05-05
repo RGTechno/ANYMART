@@ -65,7 +65,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
 
     await getAddress();
 
-    // print(address);
+    print(address);
   }
 
   @override
@@ -197,7 +197,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                   },
                                 )
                               : Container(),
-                          authData.currentUserData["location"] != ""
+                          authData.currentUserData["location"] != null
                               ? Container(
                                   child: RadioListTile(
                                     toggleable: true,

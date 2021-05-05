@@ -1,3 +1,4 @@
+import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/AuthData_Provider.dart';
 import 'package:anybuy/widgets/InputFieldDec.dart';
 import 'package:flutter/material.dart';
@@ -219,6 +220,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Icons.save_outlined,
                         ),
                         label: Text("Update"),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.red,
+                          ),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          if (authData.currentUserData["isMerchant"] == true) {
+                            await authData.deleteMerchantAccount();
+                          } else {
+                            await authData.deleteUserAccount();
+                          }
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          await Navigator.of(context)
+                              .pushReplacementNamed(homeScreen);
+                        },
+                        child: Text(
+                          "DELETE ACCOUNT",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
