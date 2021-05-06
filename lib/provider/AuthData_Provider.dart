@@ -166,7 +166,7 @@ class AuthData with ChangeNotifier {
     notifyListeners();
   }
 
-  void createUser({
+  Future<void> createUser({
     @required String email,
     @required String pass,
     @required String firstname,
@@ -249,7 +249,7 @@ class AuthData with ChangeNotifier {
     notifyListeners();
   }
 
-  void createMerchant({
+  Future<void> createMerchant({
     @required String email,
     @required String pass,
     @required String firstname,

@@ -80,7 +80,31 @@ class OrdersData with ChangeNotifier {
   }) async {
     final timeStamp = DateTime.now();
     try {
-      if (location != null && phone != null) {
+      print(phone);
+      if (location == null || phone == null) {
+        return showDialog(
+          context: ctx,
+          builder: (ctx) => AlertDialog(
+            title: Text("Cannot Place Order!!"),
+            content:
+                Text("Delivery Location and Phone Number must be provided."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pushNamed(profileScreen);
+                },
+                child: Text("Go to profile"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop(false);
+                },
+                child: Text("OK"),
+              ),
+            ],
+          ),
+        );
+      } else {
         await addOrder(
           userCollection,
           _auth.currentUser.uid,
@@ -128,29 +152,6 @@ class OrdersData with ChangeNotifier {
           documentId,
         );
         orderHandler();
-      } else {
-        return showDialog(
-          context: ctx,
-          builder: (ctx) => AlertDialog(
-            title: Text("Cannot Place Order!!"),
-            content:
-                Text("Delivery Location and Phone Number must be provided."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pushNamed(profileScreen);
-                },
-                child: Text("Go to profile"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop(false);
-                },
-                child: Text("OK"),
-              ),
-            ],
-          ),
-        );
       }
     } catch (err) {
       print(err);

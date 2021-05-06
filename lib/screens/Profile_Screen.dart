@@ -159,6 +159,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           initialValue: currentUserData["phoneNumber"] != null
                               ? "${currentUserData["phoneNumber"]}"
                               : "",
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Field is Required";
+                            }
+                            if (value.length != 10) {
+                              return "Invalid, Requires 10 Digit valid number";
+                            }
+                            return null;
+                          },
                           keyboardType: TextInputType.number,
                           onFieldSubmitted: (String value) {
                             phone = value;

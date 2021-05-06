@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:anybuy/constants.dart';
 import 'package:anybuy/provider/AuthData_Provider.dart';
-import 'package:anybuy/widgets/AppHeader.dart';
 import 'package:anybuy/widgets/ImagePicker.dart';
 import 'package:anybuy/widgets/InputFieldDec.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,7 @@ class AuthMerchant extends StatefulWidget {
 }
 
 class _AuthMerchantState extends State<AuthMerchant> {
+  bool _isLoading = false;
   File _imagePick;
 
   void _imagePicked(File image) {
@@ -88,14 +88,23 @@ class _AuthMerchantState extends State<AuthMerchant> {
       }
       _authMerchantKey.currentState.save();
       if (!wantSignup) {
+        setState(() {
+          _isLoading = true;
+        });
         await authData.login(merchEmail, merchPass, context);
         if (authData.currentUserData.isNotEmpty)
           await Navigator.of(context).pushReplacementNamed(homeScreen);
+        setState(() {
+          _isLoading = false;
+        });
       } else {
         if (_imagePick == null)
           errorDialog(context, "Submit An Image");
         else {
-          authData.createMerchant(
+          setState(() {
+            _isLoading = true;
+          });
+          await authData.createMerchant(
             email: merchEmail,
             pass: merchPass,
             firstname: merchFirstName,
@@ -110,278 +119,292 @@ class _AuthMerchantState extends State<AuthMerchant> {
           _emailController.clear();
           _passwordController.clear();
           _outletController.clear();
+          setState(() {
+            _isLoading = false;
+          });
         }
       }
     }
 
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                color2,
-                color1,
-              ],
-              stops: [0.95, 0.05],
+    return _isLoading
+        ? Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-          padding: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          // margin: EdgeInsets.all(10),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                if (wantSignup) ImgPicker(_imagePicked),
-                Form(
-                  key: _authMerchantKey,
+          )
+        : GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Scaffold(
+              appBar: AppBar(),
+              body: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      color2,
+                      color1,
+                    ],
+                    stops: [0.95, 0.05],
+                  ),
+                ),
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.center,
+                // margin: EdgeInsets.all(10),
+                child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      wantSignup
-                          ? Padding(
+                      if (wantSignup) ImgPicker(_imagePicked),
+                      Form(
+                        key: _authMerchantKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            wantSignup
+                                ? Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: TextFormField(
+                                      controller: _firstNameController,
+                                      focusNode: _firstName,
+                                      decoration: inpDec(
+                                        "First Name",
+                                        "First Name",
+                                      ),
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "Required";
+                                        }
+                                        return null;
+                                      },
+                                      onFieldSubmitted: (String value) {
+                                        merchFirstName = value;
+                                        _firstName.unfocus();
+                                        FocusScope.of(context)
+                                            .requestFocus(_lastName);
+                                      },
+                                      onSaved: (newValue) {
+                                        setState(() {
+                                          merchFirstName = newValue;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                : Container(),
+                            wantSignup
+                                ? Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: TextFormField(
+                                      controller: _lastNameController,
+                                      focusNode: _lastName,
+                                      decoration: inpDec(
+                                        "Last Name",
+                                        "Last Name",
+                                      ),
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "Required";
+                                        }
+                                        return null;
+                                      },
+                                      onFieldSubmitted: (String value) {
+                                        merchLastName = value;
+                                        _lastName.unfocus();
+                                        FocusScope.of(context)
+                                            .requestFocus(_email);
+                                      },
+                                      onSaved: (newValue) {
+                                        setState(() {
+                                          merchLastName = newValue;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                : Container(),
+                            Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: TextFormField(
-                                controller: _firstNameController,
-                                focusNode: _firstName,
+                                controller: _emailController,
+                                focusNode: _email,
                                 decoration: inpDec(
-                                  "First Name",
-                                  "First Name",
+                                  "Enter Email-ID",
+                                  "Email",
                                 ),
                                 validator: (String value) {
-                                  if (value.isEmpty) {
-                                    return "Required";
+                                  if (value.isEmpty || !value.contains("@")) {
+                                    return "Invalid";
                                   }
                                   return null;
                                 },
                                 onFieldSubmitted: (String value) {
-                                  merchFirstName = value;
-                                  _firstName.unfocus();
+                                  merchEmail = value;
+                                  _email.unfocus();
                                   FocusScope.of(context)
-                                      .requestFocus(_lastName);
+                                      .requestFocus(_password);
                                 },
                                 onSaved: (newValue) {
                                   setState(() {
-                                    merchFirstName = newValue;
+                                    merchEmail = newValue;
                                   });
                                 },
-                              ),
-                            )
-                          : Container(),
-                      wantSignup
-                          ? Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: TextFormField(
-                                controller: _lastNameController,
-                                focusNode: _lastName,
-                                decoration: inpDec(
-                                  "Last Name",
-                                  "Last Name",
-                                ),
-                                validator: (String value) {
-                                  if (value.isEmpty) {
-                                    return "Required";
-                                  }
-                                  return null;
-                                },
-                                onFieldSubmitted: (String value) {
-                                  merchLastName = value;
-                                  _lastName.unfocus();
-                                  FocusScope.of(context).requestFocus(_email);
-                                },
-                                onSaved: (newValue) {
-                                  setState(() {
-                                    merchLastName = newValue;
-                                  });
-                                },
-                              ),
-                            )
-                          : Container(),
-                      Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: TextFormField(
-                          controller: _emailController,
-                          focusNode: _email,
-                          decoration: inpDec(
-                            "Enter Email-ID",
-                            "Email",
-                          ),
-                          validator: (String value) {
-                            if (value.isEmpty || !value.contains("@")) {
-                              return "Invalid";
-                            }
-                            return null;
-                          },
-                          onFieldSubmitted: (String value) {
-                            merchEmail = value;
-                            _email.unfocus();
-                            FocusScope.of(context).requestFocus(_password);
-                          },
-                          onSaved: (newValue) {
-                            setState(() {
-                              merchEmail = newValue;
-                            });
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: TextFormField(
-                          controller: _passwordController,
-                          focusNode: _password,
-                          decoration: inpDec(
-                            "Enter Password",
-                            "Password",
-                          ),
-                          obscureText: true,
-                          validator: (String value) {
-                            if (value.isEmpty) {
-                              return "Required";
-                            }
-                            if (value.length < 5) {
-                              return "Password should be more than 5 characters";
-                            }
-                            return null;
-                          },
-                          onFieldSubmitted: (String value) {
-                            merchPass = value;
-                            _password.unfocus();
-                            FocusScope.of(context).requestFocus(_outletName);
-                          },
-                          onSaved: (newValue) {
-                            setState(() {
-                              merchPass = newValue;
-                            });
-                          },
-                        ),
-                      ),
-                      wantSignup
-                          ? Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: TextFormField(
-                                controller: _outletController,
-                                focusNode: _outletName,
-                                decoration: inpDec(
-                                  "Outlet Name",
-                                  "Outlet Name",
-                                ),
-                                validator: (String value) {
-                                  if (value.isEmpty) {
-                                    return "Required";
-                                  }
-                                  return null;
-                                },
-                                onFieldSubmitted: (String value) {
-                                  outletName = value;
-                                  _outletName.unfocus();
-                                  FocusScope.of(context)
-                                      .requestFocus(_category);
-                                },
-                                onSaved: (newValue) {
-                                  setState(() {
-                                    outletName = newValue;
-                                  });
-                                },
-                              ),
-                            )
-                          : Container(),
-                      wantSignup
-                          ? Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: DropdownButtonFormField(
-                                focusNode: _category,
-                                value: category,
-                                decoration: inpDec(
-                                  "Category",
-                                  "Select Category",
-                                ),
-                                items: Categories.catMap == null
-                                    ? null
-                                    : Categories.catMap.map(
-                                        (cat) {
-                                          return new DropdownMenuItem(
-                                            child: new Text(cat["category"]),
-                                            value: cat["category"],
-                                          );
-                                        },
-                                      ).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    category = newValue;
-                                  });
-                                  _category.unfocus();
-                                  FocusScope.of(context).requestFocus(_create);
-                                },
-                              ),
-                            )
-                          : Container(),
-                      TextButton.icon(
-                        focusNode: _create,
-                        onPressed: validate,
-                        icon: Icon(
-                          !wantSignup
-                              ? Icons.login_rounded
-                              : Icons.app_registration,
-                          color: Colors.black54,
-                        ),
-                        label: Text(
-                          !wantSignup ? "Login" : "Create",
-                          style: GoogleFonts.poppins(
-                            color: Colors.black54,
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(horizontal: 20),
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              side: BorderSide(
-                                color: Colors.black54,
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            wantSignup = !wantSignup;
-                          });
-                        },
-                        child: !wantSignup
-                            ? Text(
-                                "New User! Sign Up Here",
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black54,
+                            Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: TextFormField(
+                                controller: _passwordController,
+                                focusNode: _password,
+                                decoration: inpDec(
+                                  "Enter Password",
+                                  "Password",
                                 ),
-                              )
-                            : Text(
-                                "Already a member!,Login Here",
+                                obscureText: true,
+                                validator: (String value) {
+                                  if (value.isEmpty) {
+                                    return "Required";
+                                  }
+                                  if (value.length < 5) {
+                                    return "Password should be more than 5 characters";
+                                  }
+                                  return null;
+                                },
+                                onFieldSubmitted: (String value) {
+                                  merchPass = value;
+                                  _password.unfocus();
+                                  FocusScope.of(context)
+                                      .requestFocus(_outletName);
+                                },
+                                onSaved: (newValue) {
+                                  setState(() {
+                                    merchPass = newValue;
+                                  });
+                                },
+                              ),
+                            ),
+                            wantSignup
+                                ? Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: TextFormField(
+                                      controller: _outletController,
+                                      focusNode: _outletName,
+                                      decoration: inpDec(
+                                        "Outlet Name",
+                                        "Outlet Name",
+                                      ),
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "Required";
+                                        }
+                                        return null;
+                                      },
+                                      onFieldSubmitted: (String value) {
+                                        outletName = value;
+                                        _outletName.unfocus();
+                                        FocusScope.of(context)
+                                            .requestFocus(_category);
+                                      },
+                                      onSaved: (newValue) {
+                                        setState(() {
+                                          outletName = newValue;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                : Container(),
+                            wantSignup
+                                ? Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: DropdownButtonFormField(
+                                      focusNode: _category,
+                                      value: category,
+                                      decoration: inpDec(
+                                        "Category",
+                                        "Select Category",
+                                      ),
+                                      items: Categories.catMap == null
+                                          ? null
+                                          : Categories.catMap.map(
+                                              (cat) {
+                                                return new DropdownMenuItem(
+                                                  child:
+                                                      new Text(cat["category"]),
+                                                  value: cat["category"],
+                                                );
+                                              },
+                                            ).toList(),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          category = newValue;
+                                        });
+                                        _category.unfocus();
+                                        FocusScope.of(context)
+                                            .requestFocus(_create);
+                                      },
+                                    ),
+                                  )
+                                : Container(),
+                            TextButton.icon(
+                              focusNode: _create,
+                              onPressed: validate,
+                              icon: Icon(
+                                !wantSignup
+                                    ? Icons.login_rounded
+                                    : Icons.app_registration,
+                                color: Colors.black54,
+                              ),
+                              label: Text(
+                                !wantSignup ? "Login" : "Create",
                                 style: GoogleFonts.poppins(
                                   color: Colors.black54,
                                 ),
                               ),
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
+                                  EdgeInsets.symmetric(horizontal: 20),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    side: BorderSide(
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  wantSignup = !wantSignup;
+                                });
+                              },
+                              child: !wantSignup
+                                  ? Text(
+                                      "New User! Sign Up Here",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black54,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Already a member!,Login Here",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

@@ -13,6 +13,7 @@ class AuthHome extends StatefulWidget {
 }
 
 class _AuthHomeState extends State<AuthHome> {
+  bool _isLoading = false;
   final _authHomeKey = GlobalKey<FormState>();
 
   TextEditingController _firstNameController = TextEditingController();
@@ -68,11 +69,20 @@ class _AuthHomeState extends State<AuthHome> {
       }
       _authHomeKey.currentState.save();
       if (!wantSignup) {
+        setState(() {
+          _isLoading = true;
+        });
         await authData.login(userEmail, userPass, context);
         if (authData.currentUserData.isNotEmpty)
           await Navigator.of(context).pushReplacementNamed(homeScreen);
+        setState(() {
+          _isLoading = false;
+        });
       } else {
-        authData.createUser(
+        setState(() {
+          _isLoading = true;
+        });
+        await authData.createUser(
           email: userEmail,
           pass: userPass,
           firstname: firstName,
@@ -83,239 +93,251 @@ class _AuthHomeState extends State<AuthHome> {
         _lastNameController.clear();
         _emailController.clear();
         _passwordController.clear();
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
 
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                color2,
-                color1,
-              ],
-              stops: [0.85, 0.1],
+    return _isLoading
+        ? Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-          padding: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          // margin: EdgeInsets.all(10),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ListTile(
-                  subtitle: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushReplacementNamed(merchAuth);
-                    },
-                    child: Text(
-                      "Are You A Merchant?, Click Here",
-                      style: GoogleFonts.architectsDaughter(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    "HI! User",
-                    style: GoogleFonts.architectsDaughter(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
+          )
+        : GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Scaffold(
+              appBar: AppBar(),
+              body: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      color2,
+                      color1,
+                    ],
+                    stops: [0.85, 0.1],
                   ),
                 ),
-                Form(
-                  key: _authHomeKey,
+                padding: EdgeInsets.all(10),
+                alignment: Alignment.center,
+                // margin: EdgeInsets.all(10),
+                child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      wantSignup
-                          ? Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: TextFormField(
-                                controller: _firstNameController,
-                                focusNode: _firstName,
-                                decoration: inpDec(
-                                  "First Name",
-                                  "First Name",
-                                ),
-                                validator: (String value) {
-                                  if (value.isEmpty) {
-                                    return "Required";
-                                  }
-                                  return null;
-                                },
-                                onFieldSubmitted: (String value) {
-                                  firstName = value;
-                                  _firstName.unfocus();
-                                  FocusScope.of(context)
-                                      .requestFocus(_lastName);
-                                },
-                                onSaved: (newValue) {
-                                  setState(() {
-                                    firstName = newValue;
-                                  });
-                                },
-                              ),
-                            )
-                          : Container(),
-                      wantSignup
-                          ? Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: TextFormField(
-                                controller: _lastNameController,
-                                focusNode: _lastName,
-                                decoration: inpDec(
-                                  "Last Name",
-                                  "Last Name",
-                                ),
-                                validator: (String value) {
-                                  if (value.isEmpty) {
-                                    return "Required";
-                                  }
-                                  return null;
-                                },
-                                onFieldSubmitted: (String value) {
-                                  lastName = value;
-                                  _lastName.unfocus();
-                                  FocusScope.of(context).requestFocus(_email);
-                                },
-                                onSaved: (newValue) {
-                                  setState(() {
-                                    lastName = newValue;
-                                  });
-                                },
-                              ),
-                            )
-                          : Container(),
-                      Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: TextFormField(
-                          controller: _emailController,
-                          focusNode: _email,
-                          decoration: inpDec(
-                            "Enter Email-ID",
-                            "Email",
-                          ),
-                          validator: (String value) {
-                            if (value.isEmpty || !value.contains("@")) {
-                              return "Invalid";
-                            }
-                            return null;
+                      ListTile(
+                        subtitle: InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(merchAuth);
                           },
-                          onFieldSubmitted: (String value) {
-                            userEmail = value;
-                            _email.unfocus();
-                            FocusScope.of(context).requestFocus(_password);
-                          },
-                          onSaved: (newValue) {
-                            setState(() {
-                              userEmail = newValue;
-                            });
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: TextFormField(
-                          controller: _passwordController,
-                          focusNode: _password,
-                          decoration: inpDec(
-                            "Enter Password",
-                            "Password",
-                          ),
-                          obscureText: true,
-                          validator: (String value) {
-                            if (value.isEmpty) {
-                              return "Required";
-                            }
-                            if (value.length < 5) {
-                              return "Password should be more than 5 characters";
-                            }
-                            return null;
-                          },
-                          onFieldSubmitted: (String value) {
-                            userPass = value;
-                            _password.unfocus();
-                            FocusScope.of(context).requestFocus(_create);
-                          },
-                          onSaved: (newValue) {
-                            setState(() {
-                              userPass = newValue;
-                            });
-                          },
-                        ),
-                      ),
-                      TextButton.icon(
-                        focusNode: _create,
-                        onPressed: validate,
-                        icon: Icon(
-                          !wantSignup
-                              ? Icons.login_rounded
-                              : Icons.app_registration,
-                          color: Colors.black54,
-                        ),
-                        label: Text(
-                          !wantSignup ? "Login" : "Create",
-                          style: GoogleFonts.poppins(
-                            color: Colors.black54,
-                          ),
-                        ),
-                        style: ButtonStyle(
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.symmetric(horizontal: 20),
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              side: BorderSide(
-                                color: Colors.black54,
-                              ),
+                          child: Text(
+                            "Are You A Merchant?, Click Here",
+                            style: GoogleFonts.architectsDaughter(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
+                        title: Text(
+                          "HI! User",
+                          style: GoogleFonts.architectsDaughter(
+                            color: Colors.black,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            wantSignup = !wantSignup;
-                          });
-                        },
-                        child: !wantSignup
-                            ? Text(
-                                "New User! Sign Up Here",
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black54,
+                      Form(
+                        key: _authHomeKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            wantSignup
+                                ? Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: TextFormField(
+                                      controller: _firstNameController,
+                                      focusNode: _firstName,
+                                      decoration: inpDec(
+                                        "First Name",
+                                        "First Name",
+                                      ),
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "Required";
+                                        }
+                                        return null;
+                                      },
+                                      onFieldSubmitted: (String value) {
+                                        firstName = value;
+                                        _firstName.unfocus();
+                                        FocusScope.of(context)
+                                            .requestFocus(_lastName);
+                                      },
+                                      onSaved: (newValue) {
+                                        setState(() {
+                                          firstName = newValue;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                : Container(),
+                            wantSignup
+                                ? Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: TextFormField(
+                                      controller: _lastNameController,
+                                      focusNode: _lastName,
+                                      decoration: inpDec(
+                                        "Last Name",
+                                        "Last Name",
+                                      ),
+                                      validator: (String value) {
+                                        if (value.isEmpty) {
+                                          return "Required";
+                                        }
+                                        return null;
+                                      },
+                                      onFieldSubmitted: (String value) {
+                                        lastName = value;
+                                        _lastName.unfocus();
+                                        FocusScope.of(context)
+                                            .requestFocus(_email);
+                                      },
+                                      onSaved: (newValue) {
+                                        setState(() {
+                                          lastName = newValue;
+                                        });
+                                      },
+                                    ),
+                                  )
+                                : Container(),
+                            Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: TextFormField(
+                                controller: _emailController,
+                                focusNode: _email,
+                                decoration: inpDec(
+                                  "Enter Email-ID",
+                                  "Email",
                                 ),
-                              )
-                            : Text(
-                                "Already a member!,Login Here",
+                                validator: (String value) {
+                                  if (value.isEmpty || !value.contains("@")) {
+                                    return "Invalid";
+                                  }
+                                  return null;
+                                },
+                                onFieldSubmitted: (String value) {
+                                  userEmail = value;
+                                  _email.unfocus();
+                                  FocusScope.of(context)
+                                      .requestFocus(_password);
+                                },
+                                onSaved: (newValue) {
+                                  setState(() {
+                                    userEmail = newValue;
+                                  });
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: TextFormField(
+                                controller: _passwordController,
+                                focusNode: _password,
+                                decoration: inpDec(
+                                  "Enter Password",
+                                  "Password",
+                                ),
+                                obscureText: true,
+                                validator: (String value) {
+                                  if (value.isEmpty) {
+                                    return "Required";
+                                  }
+                                  if (value.length < 5) {
+                                    return "Password should be more than 5 characters";
+                                  }
+                                  return null;
+                                },
+                                onFieldSubmitted: (String value) {
+                                  userPass = value;
+                                  _password.unfocus();
+                                  FocusScope.of(context).requestFocus(_create);
+                                },
+                                onSaved: (newValue) {
+                                  setState(() {
+                                    userPass = newValue;
+                                  });
+                                },
+                              ),
+                            ),
+                            TextButton.icon(
+                              focusNode: _create,
+                              onPressed: validate,
+                              icon: Icon(
+                                !wantSignup
+                                    ? Icons.login_rounded
+                                    : Icons.app_registration,
+                                color: Colors.black54,
+                              ),
+                              label: Text(
+                                !wantSignup ? "Login" : "Create",
                                 style: GoogleFonts.poppins(
                                   color: Colors.black54,
                                 ),
                               ),
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
+                                  EdgeInsets.symmetric(horizontal: 20),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    side: BorderSide(
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  wantSignup = !wantSignup;
+                                });
+                              },
+                              child: !wantSignup
+                                  ? Text(
+                                      "New User! Sign Up Here",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black54,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Already a member!,Login Here",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }
