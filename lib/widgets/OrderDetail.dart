@@ -35,13 +35,28 @@ class OrderDetail extends StatelessWidget {
             (ci) => Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  ci.productName,
-                  style: TextStyle(
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    "${orders.order.indexOf(ci) + 1}.)",
+                    style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.5,
-                      fontSize: 15),
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    ci.productName,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
                 Text(
                   "Qty: ${ci.quantity.toString()}X",

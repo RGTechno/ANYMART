@@ -94,7 +94,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               ),
                         orderData.deliveredOrders.length == 0
                             ? Center(
-                                child: Text("No Pending Orders"),
+                                child: Text("No Orders Delivered"),
                               )
                             : ListView.builder(
                                 itemBuilder: (_, index) {

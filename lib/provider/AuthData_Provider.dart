@@ -41,6 +41,11 @@ class AuthData with ChangeNotifier {
 
   Future<void> deleteMerchant() async {
     try {
+      await storage
+          .ref()
+          .child("outlet_images")
+          .child(_auth.currentUser.uid)
+          .delete();
       await firestore
           .collection(allUserCollection)
           .doc(_auth.currentUser.uid)
@@ -49,6 +54,14 @@ class AuthData with ChangeNotifier {
           .collection(merchantCollection)
           .doc(_auth.currentUser.uid)
           .delete();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> deleteOutletImages(String outId) async {
+    try {
+      await storage.ref().child("product_images").child(outId).delete();
     } catch (err) {
       print(err);
     }
@@ -85,6 +98,7 @@ class AuthData with ChangeNotifier {
 
   Future<void> deleteOutlet() async {
     WriteBatch batch = firestore.batch();
+    String outletID;
 
     try {
       var outlet = await firestore
@@ -93,12 +107,15 @@ class AuthData with ChangeNotifier {
           .get();
 
       outlet.docs.forEach((doc) async {
-        await doc.reference.delete();
+        outletID = doc.id;
         var outletOrders = await doc.reference.collection("orders").get();
         outletOrders.docs.forEach((order) {
           batch.delete(order.reference);
         });
+        await doc.reference.delete();
       });
+      print(outletID);
+      await deleteOutletImages(outletID);
     } catch (err) {
       print(err);
     }

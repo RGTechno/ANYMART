@@ -125,7 +125,7 @@ class DrawerMenu extends StatelessWidget {
             ),
             onTap: () {
               if(currentUserData.isEmpty){
-                Navigator.of(context).pushReplacementNamed(authHome);
+                Navigator.of(context).pushNamed(authHome);
               }
               else Navigator.of(context).pushNamed(profileScreen);
             },
@@ -138,7 +138,7 @@ class DrawerMenu extends StatelessWidget {
             ),
             onTap: () {
               if(currentUserData.isEmpty){
-                Navigator.of(context).pushReplacementNamed(authHome);
+                Navigator.of(context).pushNamed(authHome);
               }
               else Navigator.of(context).pushNamed(ordersScreen);
             },
