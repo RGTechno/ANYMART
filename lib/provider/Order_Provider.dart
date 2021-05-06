@@ -34,20 +34,20 @@ class OrdersData with ChangeNotifier {
 
   List<OrderItem> _orders = [];
 
-  // List<OrderItem> _pendingOrders = [];
-  // List<OrderItem> _deliveredOrders = [];
+  List<OrderItem> _pendingOrders = [];
+  List<OrderItem> _deliveredOrders = [];
 
   List<OrderItem> get orders {
     return [..._orders];
   }
 
-  // List<OrderItem> get pendingOrders {
-  //   return [..._pendingOrders];
-  // }
-  //
-  // List<OrderItem> get deliveredOrders {
-  //   return [..._deliveredOrders];
-  // }
+  List<OrderItem> get pendingOrders {
+    return [..._pendingOrders];
+  }
+
+  List<OrderItem> get deliveredOrders {
+    return [..._deliveredOrders];
+  }
 
   Future<void> addOrder(
     String collection,
@@ -161,6 +161,9 @@ class OrdersData with ChangeNotifier {
   Future<void> getOrders(String collection, String id) async {
     var orderResponse;
     List<OrderItem> loadedOrders = [];
+    List<OrderItem> loadedPendingOrders = [];
+    List<OrderItem> loadedDeliveredOrders = [];
+
     try {
       orderResponse = await firestore
           .collection(collection)
@@ -170,6 +173,57 @@ class OrdersData with ChangeNotifier {
           .get();
 
       orderResponse.docs.forEach((doc) {
+        if (doc["status"] == "Pending") {
+          loadedPendingOrders.insert(
+            0,
+            OrderItem(
+              userId: doc["userId"],
+              id: doc.id,
+              totalAmount: doc["totalAmount"],
+              date: DateTime.parse(doc["orderDateTime"]),
+              order: (doc["order"] as List<dynamic>)
+                  .map(
+                    (ci) => CartItem(
+                      id: ci["id"],
+                      quantity: ci["quantity"],
+                      price: ci["price"],
+                      productName: ci[productName],
+                      proImage: ci[productImg],
+                    ),
+                  )
+                  .toList(),
+              location: doc["deliveryLocation"],
+              phone: doc["phoneNumber"],
+              placedBy: doc["placedBy"],
+              orderStatus: doc["status"],
+            ),
+          );
+        } else if (doc["status"] == "Delivered") {
+          loadedDeliveredOrders.insert(
+            0,
+            OrderItem(
+              userId: doc["userId"],
+              id: doc.id,
+              totalAmount: doc["totalAmount"],
+              date: DateTime.parse(doc["orderDateTime"]),
+              order: (doc["order"] as List<dynamic>)
+                  .map(
+                    (ci) => CartItem(
+                      id: ci["id"],
+                      quantity: ci["quantity"],
+                      price: ci["price"],
+                      productName: ci[productName],
+                      proImage: ci[productImg],
+                    ),
+                  )
+                  .toList(),
+              location: doc["deliveryLocation"],
+              phone: doc["phoneNumber"],
+              placedBy: doc["placedBy"],
+              orderStatus: doc["status"],
+            ),
+          );
+        }
         loadedOrders.insert(
           0,
           OrderItem(
@@ -200,7 +254,9 @@ class OrdersData with ChangeNotifier {
       // print(_orders.map((oi) => print(oi)));
 
       _orders = loadedOrders;
-      print(_orders);
+      _pendingOrders = loadedPendingOrders;
+      _deliveredOrders = loadedDeliveredOrders;
+      // print(_deliveredOrders);
 
       // print(orderResponse);
     } catch (err) {

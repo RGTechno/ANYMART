@@ -24,40 +24,90 @@ class _OrdersScreenState extends State<OrdersScreen> {
       setState(() {});
     }
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        child: FutureBuilder(
-            future: authData.currentUserData["isMerchant"] != true
-                ? orderData.getOrders(
-                    userCollection,
-                    authData.currentUserData["id"],
-                  )
-                : orderData.getOrders(
-                    outletsCollection,
-                    outletID,
-                  ),
-            builder: (ctx, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return orderData.orders.length == 0
-                  ? Center(
-                      child: Text("No Orders Yet!!"),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Orders"),
+          centerTitle: true,
+          bottom: TabBar(
+            tabs: [
+              Tab(
+                text: "All Orders",
+                icon: Icon(Icons.border_all),
+              ),
+              Tab(
+                text: "Pending",
+                icon: Icon(Icons.pending_actions_outlined),
+              ),
+              Tab(
+                text: "Delivered",
+                icon: Icon(Icons.done_all_rounded),
+              ),
+            ],
+          ),
+        ),
+        body: RefreshIndicator(
+          onRefresh: refresh,
+          child: FutureBuilder(
+              future: authData.currentUserData["isMerchant"] != true
+                  ? orderData.getOrders(
+                      userCollection,
+                      authData.currentUserData["id"],
                     )
-                  : ListView.builder(
-                      itemBuilder: (_, index) {
-                        return Order(
-                          orders: orderData.orders[index],
-                          outletId: outletID,
-                        );
-                      },
-                      itemCount: orderData.orders.length,
-                    );
-            }),
+                  : orderData.getOrders(
+                      outletsCollection,
+                      outletID,
+                    ),
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return orderData.orders.length == 0
+                    ? Center(
+                        child: Text("No Orders Yet!!"),
+                      )
+                    : TabBarView(children: [
+                        ListView.builder(
+                          itemBuilder: (_, index) {
+                            return Order(
+                              orders: orderData.orders[index],
+                              outletId: outletID,
+                            );
+                          },
+                          itemCount: orderData.orders.length,
+                        ),
+                        orderData.pendingOrders.length == 0
+                            ? Center(
+                                child: Text("No Pending Orders"),
+                              )
+                            : ListView.builder(
+                                itemBuilder: (_, index) {
+                                  return Order(
+                                    orders: orderData.pendingOrders[index],
+                                    outletId: outletID,
+                                  );
+                                },
+                                itemCount: orderData.pendingOrders.length,
+                              ),
+                        orderData.deliveredOrders.length == 0
+                            ? Center(
+                                child: Text("No Pending Orders"),
+                              )
+                            : ListView.builder(
+                                itemBuilder: (_, index) {
+                                  return Order(
+                                    orders: orderData.deliveredOrders[index],
+                                    outletId: outletID,
+                                  );
+                                },
+                                itemCount: orderData.deliveredOrders.length,
+                              ),
+                      ]);
+              }),
+        ),
       ),
     );
   }
