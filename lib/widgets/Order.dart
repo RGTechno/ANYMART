@@ -92,8 +92,11 @@ void orderModalSheet(
                       ),
                     ),
                   ),
-                  onPressed:
-                      orders.orderStatus == "Delivered" ? null : statusChange,
+                  onPressed: orders.orderStatus == "Delivered"
+                      ? null
+                      : () async {
+                          await statusChange();
+                        },
                   child: Text("Delivered"),
                 ),
               ],

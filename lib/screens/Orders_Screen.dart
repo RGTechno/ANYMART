@@ -47,30 +47,30 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ],
           ),
         ),
-        body: RefreshIndicator(
-          onRefresh: refresh,
-          child: FutureBuilder(
-              future: authData.currentUserData["isMerchant"] != true
-                  ? orderData.getOrders(
-                      userCollection,
-                      authData.currentUserData["id"],
+        body: FutureBuilder(
+            future: authData.currentUserData["isMerchant"] != true
+                ? orderData.getOrders(
+                    userCollection,
+                    authData.currentUserData["id"],
+                  )
+                : orderData.getOrders(
+                    outletsCollection,
+                    outletID,
+                  ),
+            builder: (ctx, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return orderData.orders.length == 0
+                  ? Center(
+                      child: Text("No Orders Yet!!"),
                     )
-                  : orderData.getOrders(
-                      outletsCollection,
-                      outletID,
-                    ),
-              builder: (ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return orderData.orders.length == 0
-                    ? Center(
-                        child: Text("No Orders Yet!!"),
-                      )
-                    : TabBarView(children: [
-                        ListView.builder(
+                  : TabBarView(children: [
+                      RefreshIndicator(
+                        onRefresh: refresh,
+                        child: ListView.builder(
                           itemBuilder: (_, index) {
                             return Order(
                               orders: orderData.orders[index],
@@ -79,11 +79,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           },
                           itemCount: orderData.orders.length,
                         ),
-                        orderData.pendingOrders.length == 0
-                            ? Center(
-                                child: Text("No Pending Orders"),
-                              )
-                            : ListView.builder(
+                      ),
+                      orderData.pendingOrders.length == 0
+                          ? Center(
+                              child: Text("No Pending Orders"),
+                            )
+                          : RefreshIndicator(
+                              onRefresh: refresh,
+                              child: ListView.builder(
                                 itemBuilder: (_, index) {
                                   return Order(
                                     orders: orderData.pendingOrders[index],
@@ -92,11 +95,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 },
                                 itemCount: orderData.pendingOrders.length,
                               ),
-                        orderData.deliveredOrders.length == 0
-                            ? Center(
-                                child: Text("No Orders Delivered"),
-                              )
-                            : ListView.builder(
+                            ),
+                      orderData.deliveredOrders.length == 0
+                          ? Center(
+                              child: Text("No Orders Delivered"),
+                            )
+                          : RefreshIndicator(
+                              onRefresh: refresh,
+                              child: ListView.builder(
                                 itemBuilder: (_, index) {
                                   return Order(
                                     orders: orderData.deliveredOrders[index],
@@ -105,9 +111,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 },
                                 itemCount: orderData.deliveredOrders.length,
                               ),
-                      ]);
-              }),
-        ),
+                            ),
+                    ]);
+            }),
       ),
     );
   }
