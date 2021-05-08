@@ -49,7 +49,7 @@ class DrawerMenu extends StatelessWidget {
                   title: Text(
                     user == null
                         ? "Welcome User"
-                        : "Welcome ${currentUserData["firstname"]}",
+                        : "Hey ${currentUserData["firstname"]}",
                     style: GoogleFonts.architectsDaughter(
                       fontWeight: FontWeight.w500,
                       fontSize: 25,
