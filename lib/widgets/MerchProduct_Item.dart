@@ -1,4 +1,5 @@
 import 'package:anybuy/provider/MerchantData_Provider.dart';
+import 'package:anybuy/screens/EditProduct_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,7 +54,14 @@ class MerchantProductItem extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.edit_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => EditProductScreen(),
+                  settings: RouteSettings(arguments: proId),
+                ),
+              );
+            },
           ),
           IconButton(
               icon: Icon(Icons.delete_outline_rounded),

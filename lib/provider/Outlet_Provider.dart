@@ -89,4 +89,12 @@ class OutletData with ChangeNotifier {
     }
     return idOutlet;
   }
+
+  Future<void> updateProduct(String productId) async {
+    try {
+
+    } catch (err) {
+      print(err);
+    }
+  }
 }

@@ -11,7 +11,12 @@ class MerchantData with ChangeNotifier {
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
-  Map<String, dynamic> currentUserProduct = {};
+  Map<String, dynamic> _currentUserProduct = {};
+
+  Map<String, dynamic> get currentUserProduct {
+    return {..._currentUserProduct};
+  }
+
   String _currentUserOutletId;
 
   String get currentOutletId {
@@ -77,7 +82,7 @@ class MerchantData with ChangeNotifier {
     double price,
     String productImageUrl,
   }) async {
-    var productsList = [...currentUserProduct[products]];
+    var productsList = [..._currentUserProduct[products]];
     productsList.removeWhere((element) => element["productId"] == productId);
     print(productsList);
     try {
@@ -87,7 +92,7 @@ class MerchantData with ChangeNotifier {
           .update({
         products: productsList,
       });
-      print(currentUserProduct);
+      print(_currentUserProduct);
     } catch (err) {
       print(err);
     }
@@ -96,7 +101,7 @@ class MerchantData with ChangeNotifier {
 
   Future<Map<String, dynamic>> getProductsWithId(String currentUserId) async {
     var userProducts;
-    currentUserProduct.clear();
+    _currentUserProduct.clear();
 
     try {
       userProducts = await firestore
@@ -108,7 +113,7 @@ class MerchantData with ChangeNotifier {
           .get();
       userProducts.docs.forEach((doc) {
         _currentUserOutletId = doc.id;
-        currentUserProduct.addAll({
+        _currentUserProduct.addAll({
           merchantName: doc[merchantName],
           category: doc[category],
           outletName: doc[outletName],
@@ -120,7 +125,7 @@ class MerchantData with ChangeNotifier {
     } catch (err) {
       print(err);
     }
-    return currentUserProduct;
+    return _currentUserProduct;
     // notifyListeners();
   }
 }
