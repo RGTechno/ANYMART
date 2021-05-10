@@ -13,6 +13,12 @@ class MerchantData with ChangeNotifier {
 
   Map<String, dynamic> _currentUserProduct = {};
 
+  List _merchantProducts = [];
+
+  List get merchantProducts {
+    return [..._merchantProducts];
+  }
+
   Map<String, dynamic> get currentUserProduct {
     return {..._currentUserProduct};
   }
@@ -75,6 +81,35 @@ class MerchantData with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateProduct({
+    String id,
+    String proName,
+    double count,
+    double price,
+  }) async {
+    final prodIndex =
+        _merchantProducts.indexWhere((element) => element[productId] == id);
+    _merchantProducts[prodIndex] = {
+      productId: id,
+      productName: proName,
+      countInStock: count,
+      productPrice: price,
+      productImg: _merchantProducts[prodIndex][productImg],
+    };
+    print(_merchantProducts);
+    try {
+      await firestore
+          .collection(outletsCollection)
+          .doc(_currentUserOutletId)
+          .update({
+        products: _merchantProducts,
+      });
+    } catch (err) {
+      print(err);
+    }
+    notifyListeners();
+  }
+
   Future<void> deleteProduct({
     String productId,
     String proName,
@@ -92,7 +127,7 @@ class MerchantData with ChangeNotifier {
           .update({
         products: productsList,
       });
-      print(_currentUserProduct);
+      // print(_currentUserProduct);
     } catch (err) {
       print(err);
     }
@@ -125,6 +160,7 @@ class MerchantData with ChangeNotifier {
     } catch (err) {
       print(err);
     }
+    _merchantProducts = [..._currentUserProduct[products]];
     return _currentUserProduct;
     // notifyListeners();
   }
