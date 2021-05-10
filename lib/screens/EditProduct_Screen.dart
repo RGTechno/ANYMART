@@ -44,7 +44,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   Widget build(BuildContext context) {
     final proID = ModalRoute.of(context).settings.arguments as String;
-    final merchantData = Provider.of<MerchantData>(context);
+    final merchantData = Provider.of<MerchantData>(context,listen: false);
     final currentDetails = merchantData.currentUserProduct;
     var merchantProducts = [...currentDetails[products]];
     var product =
@@ -69,7 +69,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       setState(() {
         _isLoading = false;
       });
-      // Navigator.of(context).pop();
+      Navigator.of(context).pop();
     }
 
     return _isLoading
