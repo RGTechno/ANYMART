@@ -70,6 +70,30 @@ class MerchantData with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteProduct({
+    String productId,
+    String proName,
+    double count,
+    double price,
+    String productImageUrl,
+  }) async {
+    var productsList = [...currentUserProduct[products]];
+    productsList.removeWhere((element) => element["productId"] == productId);
+    print(productsList);
+    try {
+      await firestore
+          .collection(outletsCollection)
+          .doc(_currentUserOutletId)
+          .update({
+        products: productsList,
+      });
+      print(currentUserProduct);
+    } catch (err) {
+      print(err);
+    }
+    notifyListeners();
+  }
+
   Future<Map<String, dynamic>> getProductsWithId(String currentUserId) async {
     var userProducts;
     currentUserProduct.clear();

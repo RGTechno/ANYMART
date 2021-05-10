@@ -20,8 +20,7 @@ class MerchScreen extends StatelessWidget {
       body: FutureBuilder(
         future: merchantData.getProductsWithId(user.uid),
         builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting ||
-              snapshot.data == null) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );

@@ -8,10 +8,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authData = Provider.of<AuthData>(context);
+
     authData.getCurrentUserData();
+
     if (authData.currentUserData.isNotEmpty &&
-        authData.currentUserData["isMerchant"] == true) {
-      return MerchScreen();
+        authData.auth.currentUser != null) {
+      if (authData.currentUserData["isMerchant"] == true) {
+        return MerchScreen();
+      }
     }
     return UserHome();
   }

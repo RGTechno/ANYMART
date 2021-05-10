@@ -127,7 +127,6 @@ class OrderDetail extends StatelessWidget {
                     ],
                   ),
                 ),
-          Divider(),
           Container(
             margin: const EdgeInsets.only(top: 10, bottom: 0),
             // color: Colors.black12,
