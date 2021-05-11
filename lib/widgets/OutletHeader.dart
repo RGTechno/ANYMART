@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OutletHeader extends StatelessWidget {
   final String outletName;
   final String outletImage;
+  final Map<String, dynamic> outletDetails;
 
   OutletHeader({
+    @required this.outletDetails,
     @required this.outletName,
     this.outletImage,
   });
@@ -33,30 +36,67 @@ class OutletHeader extends StatelessWidget {
       ),
       width: double.infinity,
       height: 180,
-      child: Stack(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ListTile(
-            title: Text(
-              outletName,
-              overflow: TextOverflow.fade,
-              softWrap: true,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-            subtitle: Text(
-              "Address",
-              style: TextStyle(
-                fontSize: 13,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          outletName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "${outletDetails["location"]}",
+                          style: TextStyle(
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.blue,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        outletImage,
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    height: 120,
+                    width: 120,
+                  ),
+                ],
               ),
             ),
           ),
-          Positioned(
-            bottom: 10,
-            left: 5,
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
+              ),
+              color: Colors.black12,
+            ),
             child: Row(
-              mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 IconButton(
@@ -72,28 +112,6 @@ class OutletHeader extends StatelessWidget {
                   onPressed: () {},
                 ),
               ],
-            ),
-          ),
-          Positioned(
-            right: 15,
-            top: 12.7,
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.blue
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  outletImage,
-                  height: 150,
-                  width: 150,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              height: 150,
-              width: 150,
             ),
           ),
         ],

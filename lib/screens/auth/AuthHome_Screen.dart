@@ -73,8 +73,16 @@ class _AuthHomeState extends State<AuthHome> {
           _isLoading = true;
         });
         await authData.login(userEmail, userPass, context);
-        if (authData.currentUserData.isNotEmpty)
-          await Navigator.of(context).pushReplacementNamed(homeScreen);
+        if (authData.currentUserData.isNotEmpty) {
+          if (authData.currentUserData["isMerchant"] == true &&
+              (authData.currentUserData["location"] == null ||
+                  authData.currentUserData["location"].toString().isEmpty)) {
+            await Navigator.of(context).pushNamedAndRemoveUntil(
+                profileScreen, (Route<dynamic> route) => false);
+          } else {
+            await Navigator.of(context).pushReplacementNamed(homeScreen);
+          }
+        }
         setState(() {
           _isLoading = false;
         });

@@ -60,26 +60,30 @@ class OutletData with ChangeNotifier {
     return catOutlets;
   }
 
-  final Map<String, dynamic> outletMerchant = {};
+  final Map<String, dynamic> _outletMerchant = {};
+
+  Map<String, dynamic> get outletMerchant {
+    return {..._outletMerchant};
+  }
 
   Future<Map<String, dynamic>> getOutletById(String outId) async {
     var outletsById;
     final Map<String, dynamic> idOutlet = {};
-    outletMerchant.clear();
+    _outletMerchant.clear();
     try {
       outletsById =
           await firestore.collection(outletsCollection).doc(outId).get();
       var outletResponse = outletsById.data();
 
       var outletMerchantData = await firestore
-          .collection(merchantCollection)
+          .collection(allUserCollection)
           .doc(outletResponse[merchantId])
           .get();
 
       var merchantResponse = outletMerchantData.data();
 
-      outletMerchant.addAll(merchantResponse);
-      // print(outletMerchant);
+      _outletMerchant.addAll(merchantResponse);
+      // print(_outletMerchant);
 
       idOutlet.addAll(outletResponse);
 

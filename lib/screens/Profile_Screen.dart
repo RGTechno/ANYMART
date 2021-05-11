@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed(homeScreen);
     }
 
     return _isLoading
@@ -195,6 +195,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               : "",
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Field is Required";
+                            }
+                            return null;
+                          },
                           onFieldSubmitted: (String value) {
                             location = value;
                             _location.unfocus();

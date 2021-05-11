@@ -37,6 +37,7 @@ class Outlet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       OutletHeader(
+                        outletDetails: outletData.outletMerchant,
                         outletName: snapshot.data[outletName],
                         outletImage: snapshot.data[outletImg],
                       ),
