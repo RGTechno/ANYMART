@@ -28,21 +28,46 @@ class _OrdersScreenState extends State<OrdersScreen> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+          ),
           title: Text("Orders"),
           centerTitle: true,
           bottom: TabBar(
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Theme.of(context).accentColor),
             tabs: [
               Tab(
-                text: "All Orders",
-                icon: Icon(Icons.border_all),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text("All Orders"),
+                    Icon(Icons.border_all),
+                  ],
+                ),
               ),
               Tab(
-                text: "Pending",
-                icon: Icon(Icons.pending_actions_outlined),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text("Pending"),
+                    Icon(Icons.pending_actions_outlined),
+                  ],
+                ),
               ),
               Tab(
-                text: "Delivered",
-                icon: Icon(Icons.done_all_rounded),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text("Delivered"),
+                    Icon(Icons.done_all_rounded),
+                  ],
+                ),
               ),
             ],
           ),
